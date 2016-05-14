@@ -10,7 +10,9 @@ public class TestAutoRotate : MonoBehaviour
     {
         if (center)
         {
+            var cacheRotation = this.transform.rotation;
             transform.RotateAround(center.position, Vector3.forward, rotateSpeed * Time.deltaTime);
+            this.transform.rotation = cacheRotation;
         }
     }
 }

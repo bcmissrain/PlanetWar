@@ -3,6 +3,9 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Collections.Generic;
 
+/// <summary>
+/// 尝试使用XML配置文件
+/// </summary>
 public class UseXML : MonoBehaviour
 {
 
