@@ -6,7 +6,7 @@
 public abstract class ShipStateBase
 {
     public static readonly float MIN_RADIAN = 0.98f;        //最小旋转差值 10度
-    protected ShipStateManager m_StateManager;                  //状态管理器
+    protected ShipStateManager m_StateManager;              //状态管理器
     public ShipElement m_Ship;                              //飞船对象
     public abstract ShipState m_ShipState { get; }          //状态
 
