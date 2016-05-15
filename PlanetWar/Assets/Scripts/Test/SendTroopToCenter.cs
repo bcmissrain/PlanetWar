@@ -33,6 +33,8 @@ public class SendTroopToCenter : MonoBehaviour {
                     moveScript.enabled = true;
                 }
 
+                delStar.transform.position = GetShootPoint(centerStar.transform.position);
+
                 //var trailScript = delStar.GetComponent<TrailRenderer>();
                 //if (trailScript)
                 //{
@@ -42,5 +44,12 @@ public class SendTroopToCenter : MonoBehaviour {
                 shipList.RemoveAt(shipList.Count - 1);
             }
         }
+    }
+
+    public Vector3 GetShootPoint(Vector3 targetPos)
+    {
+        var deltaPos = this.transform.position - targetPos;
+        deltaPos.z = 0;
+        return this.transform.position - deltaPos.normalized ;
     }
 }

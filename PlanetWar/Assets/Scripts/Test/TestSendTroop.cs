@@ -42,25 +42,34 @@ public class TestSendTroop : MonoBehaviour
             {
                 timeCounter = 0;
 
-                if (shipList.Count < 10)
+                //if (shipList.Count < 10)
+                //{
+                //    AddNewShip(10, shipList.Count, 0f);
+                //}
+                //else if (shipList.Count < 20)
+                //{
+                //    AddNewShip(10, shipList.Count - 20, 90f);
+                //}
+                //else if (shipList.Count < 30)
+                //{
+                //    AddNewShip(10, shipList.Count - 30, 45f);
+                //}
+                //else if (shipList.Count < 40)
+                //{
+                //    AddNewShip(10, shipList.Count - 40, 135f);
+                //}
+                //else
+                //{
+                //    SendShip(0.25f);
+                //}
+
+                if (shipList.Count < 30)
                 {
-                    AddNewShip(10, shipList.Count, 0f);
-                }
-                else if (shipList.Count < 20)
-                {
-                    AddNewShip(10, shipList.Count - 20, 90f);
-                }
-                else if (shipList.Count < 30)
-                {
-                    AddNewShip(10, shipList.Count - 30, 45f);
-                }
-                else if (shipList.Count < 40)
-                {
-                    AddNewShip(10, shipList.Count - 40, 135f);
+                    AddNewShip(30, shipList.Count, 0f);
                 }
                 else
                 {
-                    SendShip(0.25f);
+                    SendShip(1f);
                 }
             }
         }
