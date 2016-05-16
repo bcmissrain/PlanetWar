@@ -29,7 +29,7 @@ public class SendTroopToCenter : MonoBehaviour {
 
                 if (moveScript != null)
                 {
-                    moveScript.center = centerStar;
+                    moveScript.center = centerStar.GetComponent<AddNewShip>();
                     moveScript.enabled = true;
                 }
 

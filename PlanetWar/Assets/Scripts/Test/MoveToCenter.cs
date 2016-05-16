@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class MoveToCenter : MonoBehaviour {
-    public GameObject center;
+    public AddNewShip center;
     public float moveSpeed;
     public float acc;
     public float accTime;
@@ -36,12 +36,15 @@ public class MoveToCenter : MonoBehaviour {
             }
             else
             {
-                GameObject.Destroy(this.gameObject);
+                center.AddShip();
+                ShipPool.ReturnShip(this.gameObject);
+                //GameObject.Destroy(this.gameObject);
             }
         }
         else
         {
-            GameObject.Destroy(this.gameObject);
+            ShipPool.ReturnShip(this.gameObject);
+            //GameObject.Destroy(this.gameObject);
         }
     }
 }

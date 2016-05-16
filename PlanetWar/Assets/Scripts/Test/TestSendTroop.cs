@@ -16,6 +16,7 @@ public class TestSendTroop : MonoBehaviour
     public float bornTime;
     public GameObject centerStar;
     public SendTroopToCenter sendTroopScript;
+    
     private float timeCounter;
 
     void Start()
@@ -69,7 +70,7 @@ public class TestSendTroop : MonoBehaviour
                 }
                 else
                 {
-                    SendShip(1f);
+                    SendShip(0.1f);
                 }
             }
         }
@@ -90,7 +91,7 @@ public class TestSendTroop : MonoBehaviour
     {
         int deg = 360 / total;
 
-        var newShip = GameObject.Instantiate(shipPrefab) as GameObject;
+        var newShip = ShipPool.GetAShip();//GameObject.Instantiate(shipPrefab) as GameObject;
         var newPos = parentStar.transform.position;
 
         float posX = ringLength * Mathf.Sin(Mathf.Deg2Rad * deg * beginIndex);
