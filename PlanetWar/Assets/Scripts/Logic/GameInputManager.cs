@@ -1,0 +1,85 @@
+﻿using UnityEngine;
+using System.Collections;
+
+/// <summary>
+/// 处理游戏中星球之间的触控
+/// </summary>
+public class GameInputManager : MonoBehaviour {
+    public static int starFromIndex = -1;                   //出发星球
+    public static int starToIndex = -1;                     //目的星球
+    public static Vector3 touchWorldPos = Vector3.zero;     //当前点击的位置
+
+	void Start () {
+	    
+	}
+	
+	void Update () {
+        //滑动
+        if (Input.GetMouseButton(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                var hitStar = hit.collider.gameObject;
+                int hitStarIndex = StarPoolManager.instance.GetIndexByGameObj(hitStar);
+                touchWorldPos = hit.point;
+                touchWorldPos.z = 0;
+
+                //点到了行星
+                if (hitStarIndex != -1)
+                {
+                    //如果没有设置开始行星 => 设置 starFromIndex
+                    if (starFromIndex == -1)
+                    {
+                        starFromIndex = hitStarIndex;
+                    }
+                    else
+                    {
+                        //如果设置了开始行星
+                        //如果点击的不是开始行星
+                        if (hitStarIndex != starFromIndex)
+                        {
+                            starToIndex = hitStarIndex;
+                        }
+                    }
+                }
+                else
+                {
+                    if (starFromIndex != -1)
+                    {
+                        starToIndex = -1;
+                    }
+                }
+            }
+            //没点到行星
+            //else
+            //{
+            //    if (starFromIndex != -1)
+            //    {
+            //        starToIndex = -1;
+            //    }
+            //}
+        }
+
+        //松手
+        if (Input.GetMouseButtonUp(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (starFromIndex != -1 && starToIndex != -1)
+                {
+                    //发送消息
+
+                    //停止绘制
+                }
+            }
+
+            //重置
+            starFromIndex = -1;
+            starToIndex = -1;
+        }
+	}
+}

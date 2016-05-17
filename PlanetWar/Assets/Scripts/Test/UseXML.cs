@@ -16,6 +16,7 @@ public class UseXML : MonoBehaviour
 
     void Start()
     {
+        StarPoolManager.instance.InitManager();
         //注意不要后缀名
         TextAsset textAsset = (TextAsset)Resources.Load("Test/testStarConfig", typeof(TextAsset));
    
@@ -61,7 +62,7 @@ public class UseXML : MonoBehaviour
                             }
                         }
                     }
-
+                    StarPoolManager.instance.CacheStar(item.id, newStar);
                     starList.Add(newStar);
                 }
             }

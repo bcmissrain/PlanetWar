@@ -16,7 +16,7 @@ public class TestSendTroop : MonoBehaviour
     public float bornTime;
     public GameObject centerStar;
     public SendTroopToCenter sendTroopScript;
-    
+    public float sendTroopPercent;
     private float timeCounter;
 
     void Start()
@@ -70,7 +70,7 @@ public class TestSendTroop : MonoBehaviour
                 }
                 else
                 {
-                    SendShip(0.1f);
+                    SendShip(sendTroopPercent);
                 }
             }
         }

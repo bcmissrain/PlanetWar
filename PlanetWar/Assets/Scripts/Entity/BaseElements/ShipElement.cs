@@ -55,6 +55,14 @@ public class ShipElement : MonoBehaviour
 	}
 
     /// <summary>
+    /// 重置以回收
+    /// </summary>
+    public virtual void _Reset()
+    {
+
+    }
+
+    /// <summary>
     /// 初始化
     /// </summary>
 	public virtual void _Init()
@@ -112,6 +120,8 @@ public class ShipElement : MonoBehaviour
     /// </summary>
 	public virtual void _Destroy()
 	{
-		Destroy (this.gameObject);
-	}
+        //Destroy (this.gameObject);
+        _Reset();
+        ShipPoolManager.instance.ReturnShip(this.gameObject);
+    }
 }
