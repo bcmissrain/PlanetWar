@@ -18,8 +18,7 @@ public class TestInputRing : MonoBehaviour {
     }
 	
 	void Update () {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        
+
         if (GameInputManager.starFromIndex != -1)
         {
             ringBegin.SetActive(true);

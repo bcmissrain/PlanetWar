@@ -71,8 +71,11 @@ public class GameInputManager : MonoBehaviour {
             {
                 if (starFromIndex != -1 && starToIndex != -1)
                 {
+                    EventData eventData = new EventData();
+                    eventData.intData1 = starFromIndex;
+                    eventData.intData2 = starToIndex;
                     //发送消息
-
+                    GameEventDispatcher.instance.InvokeEvent(EventNameList.GAME_INPUT_RELEASE_EVENT, eventData);
                     //停止绘制
                 }
             }
