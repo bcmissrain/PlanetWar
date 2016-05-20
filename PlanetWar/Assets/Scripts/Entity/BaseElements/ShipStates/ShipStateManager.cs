@@ -32,7 +32,7 @@ public class ShipStateManager
     /// <summary>
     /// 处理进入目标行星
     /// </summary>
-    public void EnterTargetStar(Collider collider)
+    public void EnterTargetStar(GameObject collider)
     {
         m_ShipState.EnterTargetStar(collider);
     }
@@ -40,7 +40,7 @@ public class ShipStateManager
     /// <summary>
     /// 处理进入其他行星
     /// </summary>
-    public void EnterOtherStar(Collider collider)
+    public void EnterOtherStar(GameObject collider)
     {
         m_ShipState.EnterOtherStar(collider);
     }

@@ -25,13 +25,13 @@ public abstract class ShipStateBase
     /// 进入目标行星
     /// </summary>
     /// <param name="collider"></param>
-    public virtual void EnterTargetStar(Collider collider) { } //Trigger By Manager Earlier Than UpdateState
+    public virtual void EnterTargetStar(GameObject collider) { } //Trigger By Manager Earlier Than UpdateState
 
     /// <summary>
     /// 进入其他行星
     /// </summary>
     /// <param name="collider"></param>
-    public virtual void EnterOtherStar(Collider collider) { } //Trigger By Manager Earlier Than UpdateState
+    public virtual void EnterOtherStar(GameObject collider) { } //Trigger By Manager Earlier Than UpdateState
 
     /// <summary>
     //  是否可以恢复路线

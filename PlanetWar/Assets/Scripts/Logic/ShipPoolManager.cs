@@ -56,6 +56,8 @@ public class ShipPoolManager{
         {
             if (!shipList[i].activeSelf)
             {
+                //要重新初始化
+                shipList[i].GetComponent<ShipElement>()._Init();
                 shipList[i].SetActive(true);
                 return shipList[i];
             }
@@ -76,7 +78,19 @@ public class ShipPoolManager{
         if (oldShip)
         {
             //重置各项参数
+            oldShip.transform.parent = null;
             oldShip.SetActive(false);
         }
+
+        //测试删除
+        //for (int i = 0; i < shipList.Count; i++)
+        //{
+        //    if (oldShip == shipList[i])
+        //    {
+        //        GameObject.Destroy(shipList[i]);
+        //        shipList.RemoveAt(i);
+        //        break;
+        //    }
+        //}
     }
 }

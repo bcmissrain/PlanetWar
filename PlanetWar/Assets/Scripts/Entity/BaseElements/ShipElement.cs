@@ -10,22 +10,27 @@ public enum ShipState
     Hide,
 }
 
+[RequireComponent(typeof(ShipMover))]
 public class ShipElement : MonoBehaviour
 {
+    public ShipMover shipMover;
     public ShipStateManager m_StateManager;                 //状态管理器
-
-    public int m_FromIndex;                                 //来源行星的索引
-    public int m_ToIndex;                                   //目的行星的索引
-    public int m_SurrondIndex;                              //环绕行星的索引
+    //[HideInInspector]
+    public int m_FromIndex = -1;                            //来源行星的索引
+    //[HideInInspector]
+    public int m_ToIndex = -1;                              //目的行星的索引
+    //[HideInInspector]
+    public int m_SurrondIndex = -1;                         //环绕行星的索引
 
     public StarElement m_StarFrom { get; set; }
     public StarElement m_StarTo { get; set; }
     public StarElement m_SurrondStar { get; set; }
 
-	public int m_ShipTroopNum;                              //飞船携带兵力
 	public float m_FlySpeed;                                //飞行速度
 	public float m_SurrondSpeed;                            //环绕速度
     public int m_SurrondDirection = 1;                      //环绕旋转方向
+
+    public bool m_CanMove = false;                          //是否出发
 
     /// <summary>
     /// 当前方向
@@ -50,7 +55,10 @@ public class ShipElement : MonoBehaviour
 	{
 		get
 		{
-			return (m_StarTo.transform.position - this.transform.position).normalized;
+            var deltaPos = m_StarTo.transform.position - this.transform.position;
+            //z轴不动
+            deltaPos.z = 0;
+            return deltaPos.normalized;
 		}
 	}
 
@@ -59,23 +67,58 @@ public class ShipElement : MonoBehaviour
     /// </summary>
     public virtual void _Reset()
     {
-
+        m_FromIndex = -1;
+        m_ToIndex = -1;
+        m_SurrondIndex = -1;
+        m_CanMove = false;
+        m_StarFrom = null;
+        m_StarTo = null;
+        m_SurrondStar = null;
+        this.m_StateManager = null;
     }
 
     /// <summary>
     /// 初始化
+    /// 没有设置目标行星则不会运动
     /// </summary>
 	public virtual void _Init()
 	{
-		this.m_StateManager = new ShipStateManager (this);
-	}
+        m_FromIndex = -1;
+        m_ToIndex = -1;
+        m_SurrondIndex = -1;
+        m_CanMove = false;
+        m_StarFrom = null;
+        m_StarTo = null;
+        m_SurrondStar = null;
+        this.m_StateManager = new ShipStateManager(this);
+    }
+
+    /// <summary>
+    /// 设置目的行星
+    /// </summary>
+    public virtual void SetTarget(int fromStar,int toStar)
+    {
+        if (fromStar >= 0 && toStar >= 0)
+        {
+            this.m_FromIndex = fromStar;
+            this.m_ToIndex = toStar;
+            this.m_StarFrom = StarPoolManager.instance.GetStarByIndex(fromStar).GetComponent<StarElement>();
+            this.m_StarTo = StarPoolManager.instance.GetStarByIndex(toStar).GetComponent<StarElement>();
+        }
+    }
 
     /// <summary>
     /// 更新
     /// </summary>
-	protected virtual void _Update()
+	public virtual void _Update()
 	{
-		this.m_StateManager.UpdateState ();
+        if (this.m_StateManager != null)
+        {
+            if (m_CanMove)
+            {
+                this.m_StateManager.UpdateState();
+            }
+        }
 	}
 
     /// <summary>
@@ -83,7 +126,7 @@ public class ShipElement : MonoBehaviour
     /// </summary>
 	public virtual void MoveToTarget()
 	{
-		this.m_CurrentDirection = Direction2TargetNormalized;
+		//this.m_CurrentDirection = Direction2TargetNormalized;
 		this.transform.position = this.transform.position + Direction2TargetNormalized * Time.deltaTime * m_FlySpeed;
 	}
 
@@ -102,7 +145,7 @@ public class ShipElement : MonoBehaviour
     /// <summary>
     /// 进入目标行星
     /// </summary>
-	protected virtual void _EnterTarget(Collider targetCollider)
+	protected virtual void _EnterTarget(GameObject targetCollider)
 	{
 		this.m_StateManager.EnterTargetStar (targetCollider);
 	}
@@ -110,7 +153,7 @@ public class ShipElement : MonoBehaviour
     /// <summary>
     /// 进入其他行星
     /// </summary>
-	protected virtual void _EnterOther(Collider otherCollider)
+	protected virtual void _EnterOther(GameObject otherCollider)
 	{
 		this.m_StateManager.EnterOtherStar (otherCollider);
 	}
@@ -123,5 +166,14 @@ public class ShipElement : MonoBehaviour
         //Destroy (this.gameObject);
         _Reset();
         ShipPoolManager.instance.ReturnShip(this.gameObject);
+    }
+
+    public bool IfCollideTarget()
+    {
+        if ((this.transform.position - m_StarTo.transform.position).sqrMagnitude <= 2)
+        {
+            return true;
+        }
+        return false;
     }
 }

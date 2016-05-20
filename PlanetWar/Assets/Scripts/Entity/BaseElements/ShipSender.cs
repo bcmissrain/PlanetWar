@@ -7,20 +7,21 @@ using System.Collections.Generic;
 [RequireComponent(typeof(StarElement))]
 public class ShipSender : MonoBehaviour
 {
-    public StarElement starElement;     //行星的基本信息
-    public GameObject shipPrefab;       //飞船预设
+    public StarElement starElement;         //行星的基本信息
+    public GameObject shipPrefab;           //飞船预设
 
-    public float ringLength;            //生成环长度
-    public float ringDepth;             //生成环深度
-    public float ringAddition;          //环增加倍数
+    public float ringLength;                //生成环长度
+    public float ringDepth;                 //生成环深度
+    public float ringAddition;              //环增加倍数
 
-    public float sendShipTime;          //一次派遣飞船的间隔时间
-    public int sendShipNum;             //一次派遣飞船的数目   
+    public float sendShipTime;              //一次派遣飞船的间隔时间
+    public int sendShipNum;                 //一次派遣飞船的数目   
 
-    public List<GameObject> shipList;   //飞船列表
-    public List<GameObject> sendList;   //发送的飞船列表
+    public List<GameObject> shipList;       //飞船列表
+    public List<GameObject> sendList;       //发送的飞船列表
 
-    private float sendTimeCounter = 0;
+    private float sendTimeCounter = 0;      //发射时间计数
+    private List<GameObject> tmpTransList = new List<GameObject>();
 
     /// <summary>
     /// 产生数目为n个飞船
@@ -108,45 +109,49 @@ public class ShipSender : MonoBehaviour
     }
 
     /// <summary>
-    /// 派遣飞船
+    /// 派遣飞船命令
     /// </summary>
     /// <param name="starIndex">飞船索引</param>
     /// <param name="percent">派遣比例</param>
     public virtual void SendTroopTo(int starIndex, float percent)
     {
-        GameObject starObj = StarPoolManager.instance.GetStarByIndex(starIndex);
-        if (starObj)
+        if (starIndex >= 0)
         {
-            SendTroopTo(starObj, percent);
-        }
-    }
-
-    public virtual void SendTroopTo(GameObject starObj, float percent)
-    {
-        //计算派遣数目
-        int sendNum = (int)(shipList.Count * percent);
-        if (sendNum == 0)
-        {
-            //如果有飞船且计算的值为0，则置为1
-            if (percent > 0 && shipList.Count > 0)
+            //计算派遣数目
+            int sendNum = (int)(shipList.Count * percent);
+            if (sendNum == 0)
             {
-                sendNum = 1;
+                //如果有飞船且计算的值为0，则置为1
+                if (percent > 0 && shipList.Count > 0)
+                {
+                    sendNum = 1;
+                }
             }
-        }
 
-        //移除派遣星球
-        if (sendNum > 0)
-        {
-            int totalCount = shipList.Count;
-            for (int i = totalCount - 1; i >= totalCount - sendNum; i--)
+            //移除派遣星球
+            if (sendNum > 0)
             {
-                var delShip = shipList[i];
-                sendList.Add(delShip);
-                shipList.RemoveAt(i);
+                int totalCount = shipList.Count;
+                for (int i = totalCount - 1; i >= totalCount - sendNum; i--)
+                {
+                    var delShip = shipList[i];
+                    sendList.Add(delShip);
+                    //这里并没有正式派遣，正式派遣在BeginSendTroop
+                    var delShipScript = delShip.GetComponent<ShipElement>();
+                    delShipScript.SetTarget(starElement.m_Index, starIndex);
+                    shipList.RemoveAt(i);
+                }
             }
         }
     }
 
+    //public virtual void SendTroopTo(GameObject starObj, float percent)
+    //{
+    //}
+
+    /// <summary>
+    /// 根据设置的时间和数目派遣飞船
+    /// </summary>
     public virtual void UpdateSendTroop()
     {
         if (sendList.Count > 0)
@@ -161,18 +166,43 @@ public class ShipSender : MonoBehaviour
                     minNum = sendList.Count;
                 }
 
+                //准备发射
                 for (int i = 0; i < minNum; i++)
                 {
-                    //发射
-                    Debug.Log("Send Ship " + minNum);
-                    sendList[i].SetActive(false);
+                    tmpTransList.Add(sendList[i]);
                 }
 
+                //删除环绕
                 for (int i = 0; i < minNum; i++)
                 {
-                    //删除
                     sendList.RemoveAt(0);
                 }
+
+                //发射
+                BeginSendTroop(tmpTransList);
+                
+                //记得重置
+                tmpTransList.Clear();
+            }
+        }
+    }
+
+    /// <summary>
+    /// 派遣飞船的操作
+    /// </summary>
+    /// <param name="troop"></param>
+    protected virtual void BeginSendTroop(List<GameObject> troop)
+    {
+        if (troop != null && troop.Count > 0)
+        {
+            ShipTransportManager.AddTransportTroop(tmpTransList);
+            for (int i = 0; i < troop.Count; i++)
+            {
+                //重置父节点
+                troop[i].transform.parent = null;
+                var delShipScript = troop[i].GetComponent<ShipElement>();
+                //出发
+                delShipScript.m_CanMove = true;
             }
         }
     }
@@ -201,7 +231,7 @@ public class ShipSender : MonoBehaviour
             timeCounter = 0;
             if (shipList.Count < starElement.m_MaxTroop)
             {
-                CreateTroopTo(1);
+                //CreateTroopTo(1);
                 CreateTroop(starElement.m_MaxTroop, shipList.Count, starElement.m_ShipShowType, 0.0f, starElement.GetScaleByLevel());
             }
             else

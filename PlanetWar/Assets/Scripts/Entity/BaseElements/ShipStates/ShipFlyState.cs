@@ -21,16 +21,24 @@ public class ShipFlyState : ShipStateBase
 
     public override void UpdateState()
     {
-        m_Ship.MoveToTarget();
+        if (m_Ship.m_ToIndex != -1)
+        {
+            m_Ship.MoveToTarget();
+
+            if (m_Ship.IfCollideTarget())
+            {
+                EnterTargetStar(m_Ship.m_StarTo.gameObject);
+            }
+        }
     }
 
-    public override void EnterTargetStar(Collider collider)
+    public override void EnterTargetStar(GameObject collider)
     {
         //着陆
         m_StateManager.ChangeStateTo(ShipState.Land);
     }
 
-    public override void EnterOtherStar(Collider collider)
+    public override void EnterOtherStar(GameObject collider)
     {
         StarElement otherStar = collider.gameObject.GetComponent<StarElement>();
         SetShipSurrondDirection(otherStar);
