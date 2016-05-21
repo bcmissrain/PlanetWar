@@ -7,11 +7,11 @@ public class ShipMover : MonoBehaviour {
 
     public void Start()
     {
-        shipElement._Init();
+
     }
 
     public void Update()
     {
-        shipElement._Update();
+
     }
 }

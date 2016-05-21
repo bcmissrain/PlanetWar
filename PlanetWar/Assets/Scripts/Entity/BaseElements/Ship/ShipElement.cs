@@ -164,13 +164,22 @@ public class ShipElement : MonoBehaviour
 	public virtual void _Destroy()
 	{
         //Destroy (this.gameObject);
+        if (this.m_ToIndex >= 0)
+        {
+            EventData data = new EventData();
+            data.intData1 = m_FromIndex;
+            data.intData2 = m_ToIndex;
+            data.objData1 = this.transform.position;
+            GameEventDispatcher.instance.InvokeEvent(EventNameList.LEVEL_SHIP_BOOM_EVENT, data);
+        }
         _Reset();
         ShipPoolManager.instance.ReturnShip(this.gameObject);
     }
 
     public bool IfCollideTarget()
     {
-        if ((this.transform.position - m_StarTo.transform.position).sqrMagnitude <= 2)
+        Vector2 deltaPos = new Vector2(this.transform.position.x - m_StarTo.transform.position.x, this.transform.position.y - m_StarTo.transform.position.y);
+        if (deltaPos.sqrMagnitude <= m_StarTo.GetScaleByLevel())
         {
             return true;
         }

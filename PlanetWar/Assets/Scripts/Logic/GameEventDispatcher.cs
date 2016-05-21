@@ -4,7 +4,10 @@ using System.Collections.Generic;
 
 public static class EventNameList
 {
-    public static string GAME_INPUT_RELEASE_EVENT = "input_release";
+    //松手 
+    public static string GAME_INPUT_RELEASE_EVENT   = "input_release";
+    //飞船爆炸
+    public static string LEVEL_SHIP_BOOM_EVENT      = "ship_boom";
 }
 
 public class EventData

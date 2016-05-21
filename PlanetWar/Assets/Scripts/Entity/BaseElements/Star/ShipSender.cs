@@ -207,40 +207,27 @@ public class ShipSender : MonoBehaviour
         }
     }
 
-    #region Test
-    //测试用
-    private float timeCounter = 0;
-    public void Start()
+    /// <summary>
+    /// 设置飞船生成点位置
+    /// </summary>
+    /// <param name="total">总数</param>
+    /// <param name="curIndex">当前索引</param>
+    protected virtual void GetShipBornPoint(GameObject ship,int total, int curIndex,float distance)
     {
-        ShipPoolManager.instance.InitManager(shipPrefab);
-        StarPoolManager.instance.InitManager();
-        CreateTroopTo(10);
-        if (StarPoolManager.starMap.Count == 0)
-        {
-            StarPoolManager.instance.CacheStar(0, GameObject.Find("StarFrame_0"));
-            StarPoolManager.instance.CacheStar(1, GameObject.Find("StarFrame_1"));
-            StarPoolManager.instance.CacheStar(2, GameObject.Find("StarFrame_2"));
-        }
-    }
+        int deltaDeg = 360 / total;
+        int degree = curIndex * deltaDeg;
+        float posX = ringLength * Mathf.Sin(Mathf.Deg2Rad * deltaDeg * curIndex);
+        float posY = ringDepth * Mathf.Cos(Mathf.Deg2Rad * deltaDeg * curIndex);
+        float posZ = ringLength * Mathf.Cos(Mathf.Deg2Rad * deltaDeg * curIndex);
+        var cachePos = this.transform.position;
 
-    public void Update()
-    {
-        timeCounter += Time.deltaTime;
-        if (timeCounter >= starElement.m_BornTime)
-        {
-            timeCounter = 0;
-            if (shipList.Count < starElement.m_MaxTroop)
-            {
-                //CreateTroopTo(1);
-                CreateTroop(starElement.m_MaxTroop, shipList.Count, starElement.m_ShipShowType, 0.0f, starElement.GetScaleByLevel());
-            }
-            else
-            {
-                SendTroopTo(2, 0.5f);
-            }
-        }
+        cachePos.x += posX;
+        cachePos.y += posY;
+        cachePos.z += posZ;
 
-        UpdateSendTroop();
+        ship.transform.position = cachePos;
+        var tempRotation = ship.transform.rotation;
+        ship.transform.RotateAround(this.transform.position, Vector3.forward, degree);
+        ship.transform.rotation = tempRotation;
     }
-    #endregion
 }

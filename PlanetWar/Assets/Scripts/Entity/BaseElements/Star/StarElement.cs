@@ -146,4 +146,14 @@ public class StarElement : MonoBehaviour
 
         return 1.0f;
     }
+
+
+    public virtual void OnShipDestroy(EventData eventData)
+    {
+        //这个行星是目标行星
+        if (this.m_Index == eventData.intData2)
+        {
+            this.CreateTroopTo(1);
+        }
+    }
 }
