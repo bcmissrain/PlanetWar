@@ -10,9 +10,10 @@ public class StarUpdater : MonoBehaviour {
     private float timeCounter = 0;
     void Start () {
         GameEventDispatcher.instance.RegistEventHandler(EventNameList.LEVEL_SHIP_BOOM_EVENT, starElement.OnShipDestroy);
+        GameEventDispatcher.instance.RegistEventHandler(EventNameList.GAME_INPUT_RELEASE_EVENT, shipSender.OnSendTroop);
         ShipPoolManager.instance.InitManager(shipSender.shipPrefab);
         StarPoolManager.instance.InitManager();
-        shipSender.CreateTroopTo(10);
+        shipSender.CreateTroopBy(10);
         if (StarPoolManager.starMap.Count == 0)
         {
             StarPoolManager.instance.CacheStar(0, GameObject.Find("StarFrame_0"));
@@ -31,10 +32,6 @@ public class StarUpdater : MonoBehaviour {
                 //CreateTroopTo(1);
                 shipSender.CreateTroop(starElement.m_MaxTroop, shipSender.shipList.Count, starElement.m_ShipShowType, 0.0f, starElement.GetScaleByLevel());
             }
-            else
-            {
-                shipSender.SendTroopTo(2, 0.5f);
-            }
         }
 
         shipSender.UpdateSendTroop();
@@ -43,5 +40,6 @@ public class StarUpdater : MonoBehaviour {
     void OnDestroy()
     {
         GameEventDispatcher.instance.RemoveEventHandler(EventNameList.LEVEL_SHIP_BOOM_EVENT, starElement.OnShipDestroy);
+        GameEventDispatcher.instance.RemoveEventHandler(EventNameList.GAME_INPUT_RELEASE_EVENT, shipSender.OnSendTroop);
     }
 }

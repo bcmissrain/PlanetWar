@@ -77,30 +77,23 @@ public class StarElement : MonoBehaviour
     public virtual void LevelUp() { }
 
     /// <summary>
-    /// 攻击enemyStar
+    /// 派遣所有兵力到star
     /// </summary>
-    /// <param name="enemyStar">敌方行星</param>
-    public virtual void AttackStar(StarElement enemyStar) { }
+    /// <param name="starIndex"></param>
+    public virtual void SendTroopToStar(int starIndex)
+    {
+        SendTroopToStar(starIndex, 1.0f);
+    }
 
     /// <summary>
-    /// 派遣attackNum的兵力攻击enemyStar
+    /// 派遣percent比例的兵力到star
     /// </summary>
-    /// <param name="enemyStar"></param>
-    /// <param name="attackNum"></param>
-    public virtual void AttackStar(StarElement enemyStar, float percent) { }
-
-    /// <summary>
-    /// 全力支援friendStar
-    /// </summary>
-    /// <param name="friendStar">友星</param>
-    public virtual void SupportStar(StarElement friendStar) { }
-
-    /// <summary>
-    /// 支援friendStar以supportNum的兵力
-    /// </summary>
-    /// <param name="friendStar">友星</param>
-    /// <param name="supportNum">支援兵力</param>
-    public virtual void SupportStar(StarElement friendStar, float percent) { }
+    /// <param name="starIndex"></param>
+    /// <param name="percent"></param>
+    public virtual void SendTroopToStar(int starIndex, float percent)
+    {
+        shipSender.SendTroopTo(starIndex, percent);
+    }
 
     /// <summary>
     /// 自动产生兵力
@@ -120,9 +113,14 @@ public class StarElement : MonoBehaviour
     /// <summary>
     /// 添加数目为num的飞船
     /// </summary>
-    public virtual void CreateTroopTo(int num)
+    public virtual void CreateTroopBy(int num)
     {
-        shipSender.CreateTroopTo(num);
+        shipSender.CreateTroopBy(num);
+    }
+
+    public virtual void DestroyTroopBy(int num)
+    {
+        shipSender.DestroyTroopBy(num);
     }
 
     /// <summary>
@@ -153,7 +151,8 @@ public class StarElement : MonoBehaviour
         //这个行星是目标行星
         if (this.m_Index == eventData.intData2)
         {
-            this.CreateTroopTo(1);
+            this.CreateTroopBy(1);
+            //this.DestroyTroopBy(1);
         }
     }
 }

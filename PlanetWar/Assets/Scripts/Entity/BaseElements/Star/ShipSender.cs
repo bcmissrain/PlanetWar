@@ -26,7 +26,7 @@ public class ShipSender : MonoBehaviour
     /// <summary>
     /// 产生数目为n个飞船
     /// </summary>
-    public virtual void CreateTroopTo(int num)
+    public virtual void CreateTroopBy(int num)
     {
         float ringScale = starElement.GetScaleByLevel();
         int ringTroopNum = starElement.m_MaxTroop;
@@ -34,6 +34,24 @@ public class ShipSender : MonoBehaviour
         for (int i = 0; i < num; i++)
         {
             CreateTroop(ringTroopNum, shipList.Count, showType, 0, ringScale);
+        }
+    }
+
+    /// <summary>
+    /// 删除数目为n个飞船
+    /// </summary>
+    /// <param name="num"></param>
+    public virtual void DestroyTroopBy(int num)
+    {
+        if (num > shipList.Count)
+        {
+            num = shipList.Count;
+        }
+        int totalNum = shipList.Count;
+        for (int i = totalNum - 1; i >= totalNum - num; i--)
+        {
+            shipList[i].GetComponent<ShipElement>()._Destroy();
+            shipList.RemoveAt(i);
         }
     }
 
@@ -117,6 +135,12 @@ public class ShipSender : MonoBehaviour
     {
         if (starIndex >= 0)
         {
+            //容错
+            if (percent > 1.0f)
+            {
+                percent = 1.0f;
+            }
+
             //计算派遣数目
             int sendNum = (int)(shipList.Count * percent);
             if (sendNum == 0)
@@ -144,10 +168,6 @@ public class ShipSender : MonoBehaviour
             }
         }
     }
-
-    //public virtual void SendTroopTo(GameObject starObj, float percent)
-    //{
-    //}
 
     /// <summary>
     /// 根据设置的时间和数目派遣飞船
@@ -229,5 +249,13 @@ public class ShipSender : MonoBehaviour
         var tempRotation = ship.transform.rotation;
         ship.transform.RotateAround(this.transform.position, Vector3.forward, degree);
         ship.transform.rotation = tempRotation;
+    }
+
+    public virtual void OnSendTroop(EventData eventData)
+    {
+        if (starElement.m_Index == eventData.intData1)
+        {
+            SendTroopTo(eventData.intData2, 0.5f);
+        }
     }
 }
