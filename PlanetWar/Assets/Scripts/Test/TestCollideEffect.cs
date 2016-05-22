@@ -21,8 +21,11 @@ public class TestCollideEffect : MonoBehaviour {
     {
         if (effPrefab)
         {
-            var effObj = GameObject.Instantiate(effPrefab) as GameObject;
-            effObj.transform.position = (Vector3)eventData.objData1;
+            if (eventData.intData1 == -1)
+            {
+                var effObj = GameObject.Instantiate(effPrefab) as GameObject;
+                effObj.transform.position = (Vector3)eventData.objData1;
+            }
         }        
     }
 }

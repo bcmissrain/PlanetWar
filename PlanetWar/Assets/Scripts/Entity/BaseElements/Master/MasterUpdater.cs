@@ -14,7 +14,6 @@ public class MasterUpdater : MonoBehaviour {
 	}
 	
 	void Update () {
-        //Debug.Log("Master:" + masterElement.m_Index + " " + masterElement.m_StarList.Count);
 	}
 
     void OnDestroy()
