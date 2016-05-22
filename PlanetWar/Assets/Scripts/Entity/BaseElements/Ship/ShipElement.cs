@@ -21,6 +21,9 @@ public class ShipElement : MonoBehaviour
     public int m_ToIndex = -1;                              //目的行星的索引
     //[HideInInspector]
     public int m_SurrondIndex = -1;                         //环绕行星的索引
+ 
+    //[HideInInspector]
+    public int m_MasterIndex = -1;                          //飞船所属主人索引
 
     public StarElement m_StarFrom { get; set; }
     public StarElement m_StarTo { get; set; }
@@ -70,6 +73,7 @@ public class ShipElement : MonoBehaviour
         m_FromIndex = -1;
         m_ToIndex = -1;
         m_SurrondIndex = -1;
+        m_MasterIndex = -1;
         m_CanMove = false;
         m_StarFrom = null;
         m_StarTo = null;
@@ -86,6 +90,7 @@ public class ShipElement : MonoBehaviour
         m_FromIndex = -1;
         m_ToIndex = -1;
         m_SurrondIndex = -1;
+        m_MasterIndex = -1;
         m_CanMove = false;
         m_StarFrom = null;
         m_StarTo = null;
@@ -164,14 +169,13 @@ public class ShipElement : MonoBehaviour
 	public virtual void _Destroy()
 	{
         //Destroy (this.gameObject);
-        if (this.m_ToIndex >= 0)
-        {
-            EventData data = new EventData();
-            data.intData1 = m_FromIndex;
-            data.intData2 = m_ToIndex;
-            data.objData1 = this.transform.position;
-            GameEventDispatcher.instance.InvokeEvent(EventNameList.LEVEL_SHIP_BOOM_EVENT, data);
-        }
+        EventData data = new EventData();
+        data.intData1 = m_FromIndex;
+        data.intData2 = m_ToIndex;
+        data.intData3 = m_MasterIndex;
+        data.objData1 = this.transform.position;
+        GameEventDispatcher.instance.InvokeEvent(EventNameList.LEVEL_SHIP_BOOM_EVENT, data);
+
         _Reset();
         ShipPoolManager.instance.ReturnShip(this.gameObject);
     }

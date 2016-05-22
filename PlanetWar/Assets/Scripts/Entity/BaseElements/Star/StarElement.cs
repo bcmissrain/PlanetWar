@@ -41,7 +41,8 @@ public class StarElement : MonoBehaviour
     public ShipSender shipSender;       //飞船生成&发射器
 
     public int m_Index;                 //行星索引，行星的所属可变，但是索引唯一
-	public MasterElement m_Master;      //主人
+    public int m_MasterIndex;           //主人索引
+    public MasterElement m_Master;      //主人
 	public StarType m_StarType;         //种类（不可变）
 	public StarLevel m_StarLevel;       //等级（可变）
     public int m_MaxTroop;              //产生兵力的最大值，超过不再生产
@@ -151,8 +152,63 @@ public class StarElement : MonoBehaviour
         //这个行星是目标行星
         if (this.m_Index == eventData.intData2)
         {
-            this.CreateTroopBy(1);
-            //this.DestroyTroopBy(1);
+            //增援
+            if (this.m_MasterIndex == eventData.intData3)
+            {
+                this.CreateTroopBy(1);
+            }
+            //被攻击
+            else
+            {
+                if (m_TroopNum > 0)
+                {
+                    this.DestroyTroopBy(1);
+                }
+                //如果现在兵力为0，则被占领
+                else
+                {
+                    ChangeMasterTo(eventData.intData3);
+                    this.CreateTroopBy(1);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 更改主人
+    /// </summary>
+    public virtual void ChangeMasterTo(int masterIndex)
+    {
+        //Debug.Log(this.m_MasterIndex + " ChangeMasterTo " + masterIndex);
+        if (masterIndex != this.m_MasterIndex)
+        {
+            //删除旧的
+            var oldMaster = MasterPoolManager.instance.GetMasterByIndex(m_MasterIndex);
+            if (oldMaster)
+            {
+                var oldStarList = oldMaster.m_StarList;
+                for (int i = 0; i < oldStarList.Count; i++)
+                {
+                    if (oldStarList[i] == this)
+                    {
+                        oldStarList.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
+
+            //添加新的
+            var newMaster = MasterPoolManager.instance.GetMasterByIndex(masterIndex);
+            if (newMaster)
+            {
+                newMaster.m_StarList.Add(this);
+            }
+
+            //更改索引
+            this.m_MasterIndex = masterIndex;
+
+            //播放动画
+            //更改UI
         }
     }
 }

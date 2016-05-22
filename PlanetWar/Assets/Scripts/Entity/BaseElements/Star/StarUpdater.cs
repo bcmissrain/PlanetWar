@@ -13,7 +13,7 @@ public class StarUpdater : MonoBehaviour {
         GameEventDispatcher.instance.RegistEventHandler(EventNameList.GAME_INPUT_RELEASE_EVENT, shipSender.OnSendTroop);
         ShipPoolManager.instance.InitManager(shipSender.shipPrefab);
         StarPoolManager.instance.InitManager();
-        shipSender.CreateTroopBy(10);
+        
         if (StarPoolManager.starMap.Count == 0)
         {
             StarPoolManager.instance.CacheStar(0, GameObject.Find("StarFrame_0"));

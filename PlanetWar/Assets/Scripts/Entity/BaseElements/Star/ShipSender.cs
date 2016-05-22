@@ -91,6 +91,15 @@ public class ShipSender : MonoBehaviour
             //设置父节点
             newShip.transform.parent = this.transform;
             shipList.Add(newShip);
+
+            var shipScript = newShip.GetComponent<ShipElement>();
+            //设置主人
+            shipScript.m_MasterIndex = starElement.m_MasterIndex;
+            EventData eventData = new EventData();
+            eventData.intData1 = starElement.m_MasterIndex;
+
+            //发送生成飞船的消息
+            GameEventDispatcher.instance.InvokeEvent(EventNameList.LEVEL_SHIP_BORN_EVENT, eventData);
         }
         else if (showType == ShipShowType.Ring)
         {
@@ -123,6 +132,15 @@ public class ShipSender : MonoBehaviour
             //设置父节点
             newShip.transform.parent = this.transform;
             shipList.Add(newShip);
+
+            var shipScript = newShip.GetComponent<ShipElement>();
+            //设置主人
+            shipScript.m_MasterIndex = starElement.m_MasterIndex;
+            EventData eventData = new EventData();
+            eventData.intData1 = starElement.m_MasterIndex;
+
+            //发送生成飞船的消息
+            GameEventDispatcher.instance.InvokeEvent(EventNameList.LEVEL_SHIP_BORN_EVENT, eventData);
         }
     }
 

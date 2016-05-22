@@ -6,13 +6,15 @@ public static class EventNameList
 {
     //松手 
     public static string GAME_INPUT_RELEASE_EVENT   = "input_release";
+    //飞船产生
+    public static string LEVEL_SHIP_BORN_EVENT      = "ship_born";
     //飞船爆炸
     public static string LEVEL_SHIP_BOOM_EVENT      = "ship_boom";
 }
 
 public class EventData
 {
-    public int intData1,intData2 = 0;
+    public int intData1,intData2,intData3 = 0;
     public bool boolData1, boolData2 = false;
     public string stringData1,stringData2 = "";
     public object objData1,objData2 = null;

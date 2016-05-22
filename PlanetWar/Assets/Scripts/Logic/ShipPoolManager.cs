@@ -82,15 +82,15 @@ public class ShipPoolManager{
             oldShip.SetActive(false);
         }
 
-        //测试删除
-        //for (int i = 0; i < shipList.Count; i++)
-        //{
-        //    if (oldShip == shipList[i])
-        //    {
-        //        GameObject.Destroy(shipList[i]);
-        //        shipList.RemoveAt(i);
-        //        break;
-        //    }
-        //}
+        /*测试    如果不缓存而是直接删除
+        for (int i = 0; i < shipList.Count; i++)
+        {
+            if (oldShip == shipList[i])
+            {
+                GameObject.Destroy(shipList[i]);
+                shipList.RemoveAt(i);
+                break;
+            }
+        }//*/
     }
 }

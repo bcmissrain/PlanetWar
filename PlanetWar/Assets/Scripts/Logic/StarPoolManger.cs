@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// 行星列表管理器
 /// </summary>
 public class StarPoolManager{
-    public static Dictionary<int, GameObject> starMap;
+    public static Dictionary<int, GameObject> starMap = new Dictionary<int, GameObject>();
 
     private StarPoolManager() { }
 

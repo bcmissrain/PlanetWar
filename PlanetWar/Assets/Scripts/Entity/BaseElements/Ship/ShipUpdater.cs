@@ -8,7 +8,7 @@ public class ShipUpdater : MonoBehaviour {
     public ShipMover shipMover;
 
 	void Start () {
-        shipElement._Init();
+    
     }
 	
 	void Update () {

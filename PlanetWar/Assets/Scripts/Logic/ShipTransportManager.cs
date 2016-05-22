@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 /// <summary>
 /// 飞船传输管理器
+/// （管理全局）
 /// </summary>
 public class ShipTransportManager : MonoBehaviour {
     public static List<List<GameObject>> shipList = //传输列表
