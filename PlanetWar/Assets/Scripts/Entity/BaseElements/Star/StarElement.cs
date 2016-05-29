@@ -42,12 +42,12 @@ public class StarElement : MonoBehaviour
 
     public int m_Index;                 //行星索引，行星的所属可变，但是索引唯一
     public int m_MasterIndex;           //主人索引
-    public MasterElement m_Master;      //主人
 	public StarType m_StarType;         //种类（不可变）
 	public StarLevel m_StarLevel;       //等级（可变）
     public int m_MaxTroop;              //产生兵力的最大值，超过不再生产
+    public int m_StartTroopNum;         //初始化的起始兵力
     public float m_BornTime;            //产生兵力的时间
-    public float m_BornNum;             //一次产生兵力的数目
+    public int m_BornNum;               //一次产生兵力的数目
     public ShipShowType m_ShipShowType; //飞船展现方式
 	public int m_TroopNum               //当前兵力数目
     {
@@ -77,10 +77,19 @@ public class StarElement : MonoBehaviour
     /// </summary>
     public virtual void LevelUp() { }
 
+    public bool IfFullShip()
+    {
+        return m_TroopNum >= m_MaxTroop;
+    }
+
+    public MasterElement GetMasterElement()
+    {
+        return MasterPoolManager.instance.GetMasterByIndex(this.m_MasterIndex);
+    }
+
     /// <summary>
     /// 派遣所有兵力到star
     /// </summary>
-    /// <param name="starIndex"></param>
     public virtual void SendTroopToStar(int starIndex)
     {
         SendTroopToStar(starIndex, 1.0f);
@@ -89,8 +98,6 @@ public class StarElement : MonoBehaviour
     /// <summary>
     /// 派遣percent比例的兵力到star
     /// </summary>
-    /// <param name="starIndex"></param>
-    /// <param name="percent"></param>
     public virtual void SendTroopToStar(int starIndex, float percent)
     {
         shipSender.SendTroopTo(starIndex, percent);
@@ -119,6 +126,9 @@ public class StarElement : MonoBehaviour
         shipSender.CreateTroopBy(num);
     }
 
+    /// <summary>
+    /// 删除数目为num的飞船
+    /// </summary>
     public virtual void DestroyTroopBy(int num)
     {
         shipSender.DestroyTroopBy(num);
@@ -127,7 +137,6 @@ public class StarElement : MonoBehaviour
     /// <summary>
     /// 根据等级获取放大倍数
     /// </summary>
-    /// <returns></returns>
     public virtual float GetScaleByLevel()
     {
         if (m_StarLevel == StarLevel.Level0)
@@ -146,7 +155,9 @@ public class StarElement : MonoBehaviour
         return 1.0f;
     }
 
-
+    /// <summary>
+    /// 处理飞船销毁
+    /// </summary>
     public virtual void OnShipDestroy(EventData eventData)
     {
         //这个行星是目标行星

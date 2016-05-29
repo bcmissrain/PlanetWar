@@ -170,6 +170,14 @@ public class ShipSender : MonoBehaviour
                 }
             }
 
+            EventData sendNotify = new EventData();
+            sendNotify.intData1 = this.starElement.m_Index;     //源行星
+            sendNotify.intData2 = starIndex;                    //目标行星
+            sendNotify.intData3 = sendNum;                      //派遣兵力值
+            //发送攻击通知
+            GameEventDispatcher.instance.InvokeEvent(EventNameList.STAR_SEND_SHIP, sendNotify);
+
+
             //移除派遣星球
             if (sendNum > 0)
             {

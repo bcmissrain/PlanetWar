@@ -4,8 +4,12 @@ using System.Collections.Generic;
 
 public static class EventNameList
 {
-    //松手 
+    //玩家松手 
     public static string GAME_INPUT_RELEASE_EVENT   = "input_release";
+    //行星派遣兵力
+    public static string STAR_SEND_SHIP             = "send_ship";
+    //行星求助
+    public static string STAR_ASK_HELP              = "star_help";
     //飞船产生
     public static string LEVEL_SHIP_BORN_EVENT      = "ship_born";
     //飞船爆炸

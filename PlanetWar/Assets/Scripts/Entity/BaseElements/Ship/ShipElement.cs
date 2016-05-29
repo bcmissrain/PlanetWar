@@ -29,8 +29,16 @@ public class ShipElement : MonoBehaviour
     public StarElement m_StarTo { get; set; }
     public StarElement m_SurrondStar { get; set; }
 
-	public float m_FlySpeed;                                //飞行速度
-	public float m_SurrondSpeed;                            //环绕速度
+    public float m_FlySpeedScale = 1.0f;                    //飞行速度比例
+
+	public float m_FlySpeed                                 //飞行速度
+    {
+        get { return SharedGameData.shipFlySpeed  * m_FlySpeedScale; }
+    }
+	public float m_SurrondSpeed                             //环绕速度
+    {
+        get { return SharedGameData.shipSurrendSpeed; }
+    }
     public int m_SurrondDirection = 1;                      //环绕旋转方向
 
     public bool m_CanMove = false;                          //是否出发
@@ -79,6 +87,7 @@ public class ShipElement : MonoBehaviour
         m_StarTo = null;
         m_SurrondStar = null;
         this.m_StateManager = null;
+        this.transform.up = Vector3.up;
     }
 
     /// <summary>
@@ -95,6 +104,7 @@ public class ShipElement : MonoBehaviour
         m_StarFrom = null;
         m_StarTo = null;
         m_SurrondStar = null;
+        this.transform.up = Vector3.up;
         this.m_StateManager = new ShipStateManager(this);
     }
 
@@ -131,8 +141,8 @@ public class ShipElement : MonoBehaviour
     /// </summary>
 	public virtual void MoveToTarget()
 	{
-		//this.m_CurrentDirection = Direction2TargetNormalized;
-		this.transform.position = this.transform.position + Direction2TargetNormalized * Time.deltaTime * m_FlySpeed;
+		this.transform.up = Direction2TargetNormalized;
+		this.transform.position = this.transform.position + this.transform.up * Time.deltaTime * m_FlySpeed;
 	}
 
     /// <summary>
