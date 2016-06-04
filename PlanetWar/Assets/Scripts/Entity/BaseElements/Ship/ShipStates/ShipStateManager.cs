@@ -60,7 +60,7 @@ public class ShipStateManager
                 m_ShipState = new ShipFlyState(this, m_ShipState.m_Ship);
                 break;
             case ShipState.Surrond:
-                m_ShipState = new ShipSurrondState(this, m_ShipState.m_Ship);
+                //m_ShipState = new ShipSurrondState(this, m_ShipState.m_Ship);
                 break;
             case ShipState.Land:
                 m_ShipState = new ShipLandState(this, m_ShipState.m_Ship);

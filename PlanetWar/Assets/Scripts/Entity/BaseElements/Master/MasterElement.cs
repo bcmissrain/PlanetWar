@@ -19,6 +19,10 @@ public class MasterElement : MonoBehaviour {
     public int m_EnemyIndex = -1;           //敌方索引
     public List<StarElement> m_StarList     //控制的星球列表
         = new List<StarElement>();
+    public int m_StarCount                  //具有的行星数目
+    {
+        get { return m_StarList.Count; }
+    }
     public string m_ControllerType          //控制者类型
         = ControllerType.None;
     public int m_ShipCount;                 //具有的飞船总数目
@@ -59,7 +63,30 @@ public class MasterElement : MonoBehaviour {
         m_BornAbility = bornAbility;
         m_RealBornAbility = realBornAbility;
 
-        Debug.Log("Master"+ this.m_Index +" UpdateBornAbility m_BornAbility:" + m_BornAbility);
-        Debug.Log("Master" + this.m_Index + " UpdateBornAbility m_RealBornAbility:" + m_RealBornAbility);
+        //print("Master"+ this.m_Index +" UpdateBornAbility m_BornAbility:" + m_BornAbility);
+        //print("Master" + this.m_Index + " UpdateBornAbility m_RealBornAbility:" + m_RealBornAbility);
+    }
+
+    /// <summary>
+    /// 添加新的星球（占领了新的星球）
+    /// </summary>
+    public void AddStarElement(StarElement starElement)
+    {
+        if (starElement)
+        {
+            m_StarList.Add(starElement);
+        }
+    }
+
+    /// <summary>
+    /// 删除已有星球（旧星球被占领）
+    /// </summary>
+    /// <param name="starElement"></param>
+    public void RemoveStarElement(StarElement starElement)
+    {
+        if (starElement)
+        {
+            m_StarList.Remove(starElement);
+        }
     }
 }

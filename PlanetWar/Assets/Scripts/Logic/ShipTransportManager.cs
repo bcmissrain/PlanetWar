@@ -59,6 +59,11 @@ public class ShipTransportManager : MonoBehaviour {
                         break;
                     }
                 }
+                else
+                {
+                    shipList[i].RemoveAt(j);
+                    --j;
+                }
             }
             //全都传完
             if (counter == 0)
@@ -69,5 +74,10 @@ public class ShipTransportManager : MonoBehaviour {
                 --i;
             }
         }
+    }
+
+    public static void UpdateGroupShipDirection()
+    {
+
     }
 }

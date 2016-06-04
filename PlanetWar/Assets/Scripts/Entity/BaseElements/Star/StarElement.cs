@@ -34,11 +34,16 @@ public enum ShipShowType
     Ring                //环状
 }
 
-// 行星基类
+/// <summary>
+/// 行星基类
+/// </summary>
 [RequireComponent(typeof(ShipSender))]
 public class StarElement : MonoBehaviour
 {
     public ShipSender shipSender;       //飞船生成&发射器
+    public StarUpdater starUpdater;     //行星逻辑更新器
+
+    public GameObject m_StarSon;        //飞船旋绕子节点 （不显示）
 
     public int m_Index;                 //行星索引，行星的所属可变，但是索引唯一
     public int m_MasterIndex;           //主人索引
@@ -48,8 +53,10 @@ public class StarElement : MonoBehaviour
     public int m_StartTroopNum;         //初始化的起始兵力
     public float m_BornTime;            //产生兵力的时间
     public int m_BornNum;               //一次产生兵力的数目
+    public float m_DetectScope;         //监测范围
     public ShipShowType m_ShipShowType; //飞船展现方式
-	public int m_TroopNum               //当前兵力数目
+
+    public int m_TroopNum               //当前兵力数目
     {
         get
         {
@@ -75,13 +82,19 @@ public class StarElement : MonoBehaviour
     /// <summary>
     /// 升级
     /// </summary>
-    public virtual void LevelUp() { }
+    public void LevelUp() { }
 
+    /// <summary>
+    /// 是否已经生产力满载
+    /// </summary>
     public bool IfFullShip()
     {
         return m_TroopNum >= m_MaxTroop;
     }
 
+    /// <summary>
+    /// 获取行星的Master对象
+    /// </summary>
     public MasterElement GetMasterElement()
     {
         return MasterPoolManager.instance.GetMasterByIndex(this.m_MasterIndex);
@@ -90,7 +103,7 @@ public class StarElement : MonoBehaviour
     /// <summary>
     /// 派遣所有兵力到star
     /// </summary>
-    public virtual void SendTroopToStar(int starIndex)
+    public void SendTroopToStar(int starIndex)
     {
         SendTroopToStar(starIndex, 1.0f);
     }
@@ -98,30 +111,30 @@ public class StarElement : MonoBehaviour
     /// <summary>
     /// 派遣percent比例的兵力到star
     /// </summary>
-    public virtual void SendTroopToStar(int starIndex, float percent)
+    public void SendTroopToStar(int starIndex, float percent)
     {
         shipSender.SendTroopTo(starIndex, percent);
     }
 
     /// <summary>
-    /// 自动产生兵力
+    /// 添加一批飞船
     /// </summary>
-    protected virtual void UpdateCreateTroop() { }
-
-    /// <summary>
-    /// 自动发送兵力
-    /// </summary>
-    protected virtual void UpdateSendTroop() { shipSender.UpdateSendTroop(); }
-
-    /// <summary>
-    /// 添加飞船
-    /// </summary>
-    public virtual void CreateTroop(){ }
+    public void CreateTroopOnce()
+    {
+        int bornNum = m_BornNum;
+        for (int i = 0; i < bornNum; i++)
+        {
+            if (!IfFullShip())
+            {
+                shipSender.CreateTroop(m_MaxTroop, shipSender.shipList.Count, m_ShipShowType, 0.0f, GetScaleByLevel());
+            }
+        }
+    }
 
     /// <summary>
     /// 添加数目为num的飞船
     /// </summary>
-    public virtual void CreateTroopBy(int num)
+    public void CreateTroopBy(int num)
     {
         shipSender.CreateTroopBy(num);
     }
@@ -158,7 +171,7 @@ public class StarElement : MonoBehaviour
     /// <summary>
     /// 处理飞船销毁
     /// </summary>
-    public virtual void OnShipDestroy(EventData eventData)
+    public void OnShipDestroy(EventData eventData)
     {
         //这个行星是目标行星
         if (this.m_Index == eventData.intData2)
@@ -188,31 +201,22 @@ public class StarElement : MonoBehaviour
     /// <summary>
     /// 更改主人
     /// </summary>
-    public virtual void ChangeMasterTo(int masterIndex)
+    public void ChangeMasterTo(int masterIndex)
     {
-        //Debug.Log(this.m_MasterIndex + " ChangeMasterTo " + masterIndex);
         if (masterIndex != this.m_MasterIndex)
         {
             //删除旧的
             var oldMaster = MasterPoolManager.instance.GetMasterByIndex(m_MasterIndex);
             if (oldMaster)
             {
-                var oldStarList = oldMaster.m_StarList;
-                for (int i = 0; i < oldStarList.Count; i++)
-                {
-                    if (oldStarList[i] == this)
-                    {
-                        oldStarList.RemoveAt(i);
-                        break;
-                    }
-                }
+                oldMaster.RemoveStarElement(this);
             }
 
             //添加新的
             var newMaster = MasterPoolManager.instance.GetMasterByIndex(masterIndex);
             if (newMaster)
             {
-                newMaster.m_StarList.Add(this);
+                newMaster.AddStarElement(this);
             }
 
             //更改索引
@@ -220,6 +224,28 @@ public class StarElement : MonoBehaviour
 
             //播放动画
             //更改UI
+
+            //更新逻辑计算
+            this.starUpdater.UpdateSafeDetect();
+            this.starUpdater.UpdateStarLogic();            
+        }
+    }
+
+    /// <summary>
+    /// 飞船的目标点，始终围绕飞船旋转
+    /// </summary>
+    public Vector3 TargetPosition
+    {
+        get
+        {
+            if (m_StarSon)
+            {
+                return m_StarSon.transform.position;
+            }
+            else
+            {
+                return this.transform.position;
+            }
         }
     }
 }

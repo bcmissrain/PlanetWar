@@ -32,10 +32,6 @@ public class MasterUpdater : MonoBehaviour {
     public float thinkTime = 0;
     private float timeCounter = 0;
 
-    private float defenceDegree = 0;
-    private float conquerDegree = 0;
-    private float attackDegree = 0;  
-
 	void Start () {
         GameEventDispatcher.instance.RegistEventHandler(EventNameList.LEVEL_SHIP_BORN_EVENT, OnShipBorn);
         GameEventDispatcher.instance.RegistEventHandler(EventNameList.LEVEL_SHIP_BOOM_EVENT, OnShipBoom);
@@ -145,7 +141,7 @@ public class MasterUpdater : MonoBehaviour {
 
     private void MakeDecisionByGoodMan(MasterElement enemyMaster)
     {
-
+        
     }
 
     private void MakeDecisionByPeacer(MasterElement enemyMaster)
@@ -170,10 +166,12 @@ public class MasterUpdater : MonoBehaviour {
 
     public bool IfLoseGame()
     {
+
+        //电脑控制
         if (masterElement.m_ControllerType == ControllerType.Computer)
         {
             //没星球且没有飞机才算输
-            if (masterElement.m_ShipCount == 0 && masterElement.m_StarList.Count == 0)
+            if (masterElement.m_ShipCount == 0 && masterElement.m_StarCount == 0)
             {
                 return true;
             }
@@ -182,13 +180,15 @@ public class MasterUpdater : MonoBehaviour {
                 return false;
             }
         }
+        //没控制
         else if (masterElement.m_ControllerType == ControllerType.None)
         {
             return true;
         }
+        //个人控制
         else if(masterElement.m_ControllerType == ControllerType.Human)
         {
-            if (masterElement.m_ShipCount == 0 && masterElement.m_StarList.Count == 0)
+            if (masterElement.m_ShipCount == 0 && masterElement.m_StarCount == 0)
             {
                 return true;
             }

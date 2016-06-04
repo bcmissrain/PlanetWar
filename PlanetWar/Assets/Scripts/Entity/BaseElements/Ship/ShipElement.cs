@@ -31,42 +31,25 @@ public class ShipElement : MonoBehaviour
 
     public float m_FlySpeedScale = 1.0f;                    //飞行速度比例
 
-	public float m_FlySpeed                                 //飞行速度
+	public float m_MaxFlySpeed                              //最大飞行速度
     {
         get { return SharedGameData.shipFlySpeed  * m_FlySpeedScale; }
     }
-	public float m_SurrondSpeed                             //环绕速度
-    {
-        get { return SharedGameData.shipSurrendSpeed; }
-    }
-    public int m_SurrondDirection = 1;                      //环绕旋转方向
+
+	//public float m_SurrondSpeed                           //环绕速度
+    //{
+    //   get { return SharedGameData.shipSurrendSpeed; }
+    //}
+    //public int m_SurrondDirection = 1;                    //环绕旋转方向
 
     public bool m_CanMove = false;                          //是否出发
 
-    /// <summary>
-    /// 当前方向
-    /// </summary>
-	public Vector3 m_CurrentDirection
+    // 到目标行星的单位移动向量
+	public Vector3 Direction2TargetNormalized
 	{
 		get
 		{
-			return this.transform.forward;
-		}
-
-		set
-		{
-			this.transform.forward = value.normalized;
-		}
-	}
-
-    /// <summary>
-    /// 到目标行星的单位移动向量
-    /// </summary>
-	protected Vector3 Direction2TargetNormalized
-	{
-		get
-		{
-            var deltaPos = m_StarTo.transform.position - this.transform.position;
+            var deltaPos = m_StarTo.TargetPosition - this.transform.position;
             //z轴不动
             deltaPos.z = 0;
             return deltaPos.normalized;
@@ -76,7 +59,7 @@ public class ShipElement : MonoBehaviour
     /// <summary>
     /// 重置以回收
     /// </summary>
-    public virtual void _Reset()
+    public void _Reset()
     {
         m_FromIndex = -1;
         m_ToIndex = -1;
@@ -94,7 +77,7 @@ public class ShipElement : MonoBehaviour
     /// 初始化
     /// 没有设置目标行星则不会运动
     /// </summary>
-	public virtual void _Init()
+	public void _Init()
 	{
         m_FromIndex = -1;
         m_ToIndex = -1;
@@ -111,7 +94,7 @@ public class ShipElement : MonoBehaviour
     /// <summary>
     /// 设置目的行星
     /// </summary>
-    public virtual void SetTarget(int fromStar,int toStar)
+    public void SetTarget(int fromStar,int toStar)
     {
         if (fromStar >= 0 && toStar >= 0)
         {
@@ -125,7 +108,7 @@ public class ShipElement : MonoBehaviour
     /// <summary>
     /// 更新
     /// </summary>
-	public virtual void _Update()
+	public void _Update()
 	{
         if (this.m_StateManager != null)
         {
@@ -136,31 +119,22 @@ public class ShipElement : MonoBehaviour
         }
 	}
 
-    /// <summary>
-    /// 向目标飞行
-    /// </summary>
-	public virtual void MoveToTarget()
-	{
-		this.transform.up = Direction2TargetNormalized;
-		this.transform.position = this.transform.position + this.transform.up * Time.deltaTime * m_FlySpeed;
-	}
-
-    /// <summary>
-    /// 环绕飞行
-    /// </summary>
-	public virtual void MoveSurrond()
-	{
-		Vector3 crossV1 = m_SurrondStar.transform.position - this.transform.position;
-		Vector3 crossV2 = new Vector3 (crossV1.x, crossV1.y + 1, crossV1.z); //this.transform.up;
-		Vector3 crossResult = Vector3.Cross (crossV1, crossV2) * m_SurrondDirection;
-		this.m_CurrentDirection = crossResult;
-		this.transform.position = this.transform.position + this.m_CurrentDirection * Time.deltaTime * m_FlySpeed;
-	}
+    // <summary>
+    // 环绕飞行
+    // </summary>
+	//public virtual void MoveSurrond()
+	//{
+	//	Vector3 crossV1 = m_SurrondStar.transform.position - this.transform.position;
+	//	Vector3 crossV2 = new Vector3 (crossV1.x, crossV1.y + 1, crossV1.z); //this.transform.up;
+	//	Vector3 crossResult = Vector3.Cross (crossV1, crossV2) * m_SurrondDirection;
+	//	this.m_CurrentDirection = crossResult;
+	//	this.transform.position = this.transform.position + this.m_CurrentDirection * Time.deltaTime * m_MaxFlySpeed;
+	//}
 
     /// <summary>
     /// 进入目标行星
     /// </summary>
-	protected virtual void _EnterTarget(GameObject targetCollider)
+	protected void _EnterTarget(GameObject targetCollider)
 	{
 		this.m_StateManager.EnterTargetStar (targetCollider);
 	}
@@ -168,7 +142,7 @@ public class ShipElement : MonoBehaviour
     /// <summary>
     /// 进入其他行星
     /// </summary>
-	protected virtual void _EnterOther(GameObject otherCollider)
+	protected void _EnterOther(GameObject otherCollider)
 	{
 		this.m_StateManager.EnterOtherStar (otherCollider);
 	}
@@ -176,7 +150,7 @@ public class ShipElement : MonoBehaviour
     /// <summary>
     /// 销毁
     /// </summary>
-	public virtual void _Destroy()
+	public void _Destroy()
 	{
         //Destroy (this.gameObject);
         EventData data = new EventData();

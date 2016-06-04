@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
-using System.Linq;
-using System.Xml.Linq;
+using System.Xml;
 using System.Collections.Generic;
 
 /// <summary>
@@ -8,6 +7,13 @@ using System.Collections.Generic;
 /// </summary>
 public class UseXML : MonoBehaviour
 {
+    class TempStar
+    {
+        public int id;
+        public float rotateSpeed;
+        public int fatherId;
+        public Vector3 position;
+    }
 
     public GameObject starPrefab;
     public List<GameObject> starList = new List<GameObject>();
@@ -23,19 +29,23 @@ public class UseXML : MonoBehaviour
         if (textAsset != null)
         {
             showStr = textAsset.text;
+            XmlDocument xDox = new XmlDocument();
+            xDox.LoadXml(textAsset.text);
+            XmlNode xRoot = xDox.SelectSingleNode("starList");
 
-            XDocument xDox = XDocument.Parse(textAsset.text);
-            XElement root = xDox.Root;
+            List<TempStar> stars = new List<TempStar>();
 
             //读取星球信息
-            var stars = from item in root.Elements()
-                        select new
-                        {
-                            id = int.Parse(item.Element("id").Value),
-                            rotateSpeed = float.Parse(item.Element("rotate").Value),
-                            fatherId = int.Parse(item.Element("father").Value),
-                            position = new Vector3(float.Parse(item.Element("pos_x").Value), float.Parse(item.Element("pos_y").Value), float.Parse(item.Element("pos_z").Value))
-                        };
+            foreach (XmlElement item in xRoot.ChildNodes)
+            {
+                TempStar s = new TempStar();
+                s.id = int.Parse(item.SelectSingleNode("id").InnerText);
+                s.rotateSpeed = float.Parse(item.SelectSingleNode("rotate").InnerText);
+                s.fatherId = int.Parse(item.SelectSingleNode("father").InnerText);
+                s.position = new Vector3(float.Parse(item.SelectSingleNode("pos_x").InnerText), float.Parse(item.SelectSingleNode("pos_y").InnerText), float.Parse(item.SelectSingleNode("pos_z").InnerText));
+                stars.Add(s);
+            }
+
 
             //组装星球
             foreach (var item in stars)
