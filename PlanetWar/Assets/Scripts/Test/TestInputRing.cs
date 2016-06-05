@@ -5,10 +5,10 @@ public class TestInputRing : MonoBehaviour {
     public GameObject ringBegingPrefab;
     public GameObject ringEndPrefab;
     public GameObject linePrefab;
-    private LineRenderer linkLine;
 
     private GameObject ringBegin;
     private GameObject ringEnd;
+    private LineRenderer linkLine;
 
     void Start () {
         ringBegin = GameObject.Instantiate(ringBegingPrefab) as GameObject;

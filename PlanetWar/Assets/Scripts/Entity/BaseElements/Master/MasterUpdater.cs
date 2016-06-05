@@ -6,7 +6,9 @@ using System.Collections;
 /// </summary>
 public static class AIType
 {
-    public const string MasterGoodMan  = "GoodMan"; 
+    public const string MasterTeacher  = "Teacher";     //教程
+    public const string MasterRandom   = "Random";      //随机
+
     public const string MasterPeace    = "Peace";
     public const string MasterAttack   = "Attack";
     public const string MasterCoward   = "Coward";
@@ -37,7 +39,7 @@ public class MasterUpdater : MonoBehaviour {
         GameEventDispatcher.instance.RegistEventHandler(EventNameList.LEVEL_SHIP_BOOM_EVENT, OnShipBoom);
 
         //注册到缓冲池
-        MasterPoolManager.instance.AddMasterByIndex(masterElement.m_Index, masterElement);
+        //改为在GameLevelManager中进行注册
 
         //第一次做决定
         UpdateMasterInfo();
@@ -111,8 +113,8 @@ public class MasterUpdater : MonoBehaviour {
             {
                 switch (this.masterType)
                 {
-                    case AIType.MasterGoodMan:
-                        MakeDecisionByGoodMan(enemyMaster);
+                    case AIType.MasterTeacher:
+                        MakeDecisionByTeacher(enemyMaster);
                         break;
                     case AIType.MasterPeace:
                         MakeDecisionByPeacer(enemyMaster);
@@ -127,19 +129,19 @@ public class MasterUpdater : MonoBehaviour {
                         MakeDecisionByGod(enemyMaster);
                         break;
                     default:
-                        MakeDecisionByGoodMan(enemyMaster);
+                        MakeDecisionByTeacher(enemyMaster);
                         break;
                 }
             }
             //没敌人也别做啥决定了
             else
             {
-                MakeDecisionByGoodMan(enemyMaster);
+                MakeDecisionByTeacher(enemyMaster);
             }
         }
     }
 
-    private void MakeDecisionByGoodMan(MasterElement enemyMaster)
+    private void MakeDecisionByTeacher(MasterElement enemyMaster)
     {
         
     }

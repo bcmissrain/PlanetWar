@@ -8,7 +8,6 @@ using System.Collections.Generic;
 public class ShipSender : MonoBehaviour
 {
     public StarElement starElement;         //行星的基本信息
-    public GameObject shipPrefab;           //飞船预设
 
     public float ringLength;                //生成环长度
     public float ringDepth;                 //生成环深度
@@ -26,11 +25,11 @@ public class ShipSender : MonoBehaviour
     /// <summary>
     /// 产生数目为n个飞船
     /// </summary>
-    public virtual void CreateTroopBy(int num)
+    public void CreateTroopBy(int num)
     {
         float ringScale = starElement.GetScaleByLevel();
         int ringTroopNum = starElement.m_MaxTroop;
-        ShipShowType showType = starElement.m_ShipShowType;
+        string showType = starElement.m_ShipShowType;
         for (int i = 0; i < num; i++)
         {
             CreateTroop(ringTroopNum, shipList.Count, showType, 0, ringScale);
@@ -41,7 +40,7 @@ public class ShipSender : MonoBehaviour
     /// 删除数目为n个飞船
     /// </summary>
     /// <param name="num"></param>
-    public virtual void DestroyTroopBy(int num)
+    public void DestroyTroopBy(int num)
     {
         if (num > shipList.Count)
         {
@@ -62,7 +61,7 @@ public class ShipSender : MonoBehaviour
     /// <param name="beginIndex">新飞船的index</param>
     /// <param name="degree">倾斜度数</param>
     /// <param name="scale">放大倍数</param>
-    public virtual void CreateTroop(int total,int beginIndex,ShipShowType showType,float degree = 0.0f,float scale = 1.0f)
+    public void CreateTroop(int total,int beginIndex,string showType,float degree = 0.0f,float scale = 1.0f)
     {
         if (showType == ShipShowType.Cloud)
         {
@@ -88,17 +87,28 @@ public class ShipSender : MonoBehaviour
             var tempRotation = newShip.transform.rotation;
             newShip.transform.RotateAround(this.transform.position, Vector3.forward, degree);
             newShip.transform.rotation = tempRotation;
+            
             //设置父节点
             newShip.transform.parent = this.transform;
             shipList.Add(newShip);
 
             var shipScript = newShip.GetComponent<ShipElement>();
+            var shipMatScript = newShip.GetComponent<ShipMaterial>();
+            shipScript.m_BaseFlySpeed = starElement.m_ShipFlySpeed;
+            
             //设置主人
             shipScript.m_MasterIndex = starElement.m_MasterIndex;
-            EventData eventData = new EventData();
-            eventData.intData1 = starElement.m_MasterIndex;
+
+            //设置UI
+            var shipMat = shipMatScript.GetMaterialByShip(starElement.GetMasterElement().m_ThemeColor);
+            if (shipMat)
+            {
+                newShip.renderer.material = shipMat;
+            }
 
             //发送生成飞船的消息
+            EventData eventData = new EventData();
+            eventData.intData1 = starElement.m_MasterIndex;
             GameEventDispatcher.instance.InvokeEvent(EventNameList.LEVEL_SHIP_BORN_EVENT, eventData);
         }
         else if (showType == ShipShowType.Ring)
@@ -129,17 +139,27 @@ public class ShipSender : MonoBehaviour
             var tempRotation = newShip.transform.rotation;
             newShip.transform.RotateAround(this.transform.position, Vector3.forward, degree);
             newShip.transform.rotation = tempRotation;
+
             //设置父节点
             newShip.transform.parent = this.transform;
             shipList.Add(newShip);
 
             var shipScript = newShip.GetComponent<ShipElement>();
+            var shipMatScript = newShip.GetComponent<ShipMaterial>();
+
             //设置主人
             shipScript.m_MasterIndex = starElement.m_MasterIndex;
-            EventData eventData = new EventData();
-            eventData.intData1 = starElement.m_MasterIndex;
+
+            //设置UI
+            var shipMat = shipMatScript.GetMaterialByShip(starElement.GetMasterElement().m_ThemeColor);
+            if (shipMat)
+            {
+                newShip.renderer.material = shipMat;
+            }
 
             //发送生成飞船的消息
+            EventData eventData = new EventData();
+            eventData.intData1 = starElement.m_MasterIndex;
             GameEventDispatcher.instance.InvokeEvent(EventNameList.LEVEL_SHIP_BORN_EVENT, eventData);
         }
     }
@@ -149,7 +169,7 @@ public class ShipSender : MonoBehaviour
     /// </summary>
     /// <param name="starIndex">飞船索引</param>
     /// <param name="percent">派遣比例</param>
-    public virtual void SendTroopTo(int starIndex, float percent)
+    public void SendTroopTo(int starIndex, float percent)
     {
         if (starIndex >= 0)
         {
@@ -198,7 +218,7 @@ public class ShipSender : MonoBehaviour
     /// <summary>
     /// 根据设置的时间和数目派遣飞船
     /// </summary>
-    public virtual void UpdateSendTroop()
+    public void UpdateSendTroop()
     {
         if (sendList.Count > 0)
         {
@@ -237,7 +257,7 @@ public class ShipSender : MonoBehaviour
     /// 派遣飞船的操作
     /// </summary>
     /// <param name="troop"></param>
-    protected virtual void BeginSendTroop(List<GameObject> troop)
+    protected void BeginSendTroop(List<GameObject> troop)
     {
         if (troop != null && troop.Count > 0)
         {
@@ -258,7 +278,7 @@ public class ShipSender : MonoBehaviour
     /// </summary>
     /// <param name="total">总数</param>
     /// <param name="curIndex">当前索引</param>
-    protected virtual void GetShipBornPoint(GameObject ship,int total, int curIndex,float distance)
+    protected void GetShipBornPoint(GameObject ship,int total, int curIndex,float distance)
     {
         int deltaDeg = 360 / total;
         int degree = curIndex * deltaDeg;
@@ -277,7 +297,7 @@ public class ShipSender : MonoBehaviour
         ship.transform.rotation = tempRotation;
     }
 
-    public virtual void OnSendTroop(EventData eventData)
+    public void OnSendTroop(EventData eventData)
     {
         if (starElement.m_Index == eventData.intData1)
         {

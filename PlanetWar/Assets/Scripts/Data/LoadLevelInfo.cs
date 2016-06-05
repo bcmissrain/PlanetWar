@@ -3,12 +3,14 @@ using System.Collections;
 
 public class LoadLevelInfo : MonoBehaviour {
 
-	// Use this for initialization
+    void Awake()
+    {
+    }
+
 	void Start () {
 	
 	}
 	
-	// Update is called once per frame
 	void Update () {
 	
 	}

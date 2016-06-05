@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<level xsi:noNamespaceSchemaLocation="../../Scripts/xmlDefine/Level.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <levelDefine>
+    <levelId>0</levelId>
+    <levelOrder>0</levelOrder>
+    <levelDes>Level 0</levelDes>
+  </levelDefine>
+  <masterList>
+    <master>
+      <masterId>0</masterId>
+      <enemyId>-1</enemyId>
+      <theme>Grey</theme>
+      <controllerType>None</controllerType>
+      <aiType>Teacher</aiType>
+      <thinkTime>10</thinkTime>
+      <masterName>Teacher 0</masterName>
+      <masterDes>Teacher 0</masterDes>
+    </master>
+    <master>
+      <masterId>1</masterId>
+      <enemyId>2</enemyId>
+      <theme>Blue</theme>
+      <controllerType>Human</controllerType>
+      <aiType>God</aiType>
+      <thinkTime>10</thinkTime>
+      <masterName>Me</masterName>
+      <masterDes>Me</masterDes>
+    </master>
+    <master>
+      <masterId>2</masterId>
+      <enemyId>1</enemyId>
+      <theme>Red</theme>
+      <controllerType>Computer</controllerType>
+      <aiType>Coward</aiType>
+      <thinkTime>5</thinkTime>
+      <masterName>Enemy 0</masterName>
+      <masterDes>Enemy 1</masterDes>
+    </master>
+  </masterList>
+  <starList>
+    <star>
+      <starId>0</starId>
+      <masterId>0</masterId>
+      <starParentId>-1</starParentId>
+      <rotateSpeed>0</rotateSpeed>
+      <position>
+        <x>0</x>
+        <y>0</y>
+        <z>10</z>
+      </position>
+      <starType>TroopStar</starType>
+      <starLevel>0</starLevel>
+      <maxTroop>30</maxTroop>
+      <startTroopNum>30</startTroopNum>
+      <bornTime>1</bornTime>
+      <bornNum>1</bornNum>
+      <detectScope>2</detectScope>
+      <shipFlySpeed>2</shipFlySpeed>
+      <shipShowType>Cloud</shipShowType>
+      <thinkTime>3</thinkTime>
+      <ringLength>1</ringLength>
+      <ringDepth>0.3</ringDepth>
+      <ringAddition>1.2</ringAddition>
+      <sendShipTime>0.3</sendShipTime>
+      <sendShipNum>5</sendShipNum>
+      <starDes>Star 0</starDes>
+    </star>
+    <star>
+      <starId>1</starId>
+      <masterId>1</masterId>
+      <starParentId>-1</starParentId>
+      <rotateSpeed>0</rotateSpeed>
+      <position>
+        <x>-5</x>
+        <y>-5</y>
+        <z>0</z>
+      </position>
+      <starType>TroopStar</starType>
+      <starLevel>0</starLevel>
+      <maxTroop>30</maxTroop>
+      <startTroopNum>30</startTroopNum>
+      <bornTime>1</bornTime>
+      <bornNum>1</bornNum>
+      <detectScope>2</detectScope>
+      <shipFlySpeed>2</shipFlySpeed>
+      <shipShowType>Cloud</shipShowType>
+      <thinkTime>3</thinkTime>
+      <ringLength>1</ringLength>
+      <ringDepth>0.3</ringDepth>
+      <ringAddition>1.2</ringAddition>
+      <sendShipTime>0.3</sendShipTime>
+      <sendShipNum>5</sendShipNum>
+      <starDes>Star 1</starDes>
+    </star>
+    <star>
+      <starId>2</starId>
+      <masterId>2</masterId>
+      <starParentId>-1</starParentId>
+      <rotateSpeed>0</rotateSpeed>
+      <position>
+        <x>5</x>
+        <y>5</y>
+        <z>20</z>
+      </position>
+      <starType>TroopStar</starType>
+      <starLevel>0</starLevel>
+      <maxTroop>30</maxTroop>
+      <startTroopNum>30</startTroopNum>
+      <bornTime>2</bornTime>
+      <bornNum>1</bornNum>
+      <detectScope>2</detectScope>
+      <shipFlySpeed>2</shipFlySpeed>
+      <shipShowType>Cloud</shipShowType>
+      <thinkTime>3</thinkTime>
+      <ringLength>1</ringLength>
+      <ringDepth>0.3</ringDepth>
+      <ringAddition>1.2</ringAddition>
+      <sendShipTime>0.2</sendShipTime>
+      <sendShipNum>1</sendShipNum>
+      <starDes>Star 2</starDes>
+    </star>
+  </starList>
+</level>

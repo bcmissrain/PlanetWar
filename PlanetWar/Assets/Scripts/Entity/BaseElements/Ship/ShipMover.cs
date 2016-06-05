@@ -5,7 +5,7 @@ using System.Collections;
 public class ShipMover : MonoBehaviour {
     public ShipElement shipElement;         //飞船元素
     public Vector3 m_Force;                 //飞船受力方向
-    public float m_CurrentSpeed;            //飞船当前速度
+    //public float m_CurrentSpeed;            //飞船当前速度
     public Vector3 m_GroupDirection;        //飞船组分配的飞行方向
 
     public Vector3 m_CurrentDirection       // 当前方向

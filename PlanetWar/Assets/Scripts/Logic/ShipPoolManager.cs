@@ -19,15 +19,17 @@ public class ShipPoolManager{
     public void InitManager(GameObject shipPrefab)
     {
         shipList = new List<GameObject>();
-        
-        //缓存预设
-        this.shipPrefab = shipPrefab;
-
-        for (int i = 0; i < cacheSize; i++)
+        if (shipPrefab)
         {
-            var newShip = GameObject.Instantiate(shipPrefab) as GameObject;
-            newShip.SetActive(false);
-            shipList.Add(newShip);
+            //缓存预设
+            this.shipPrefab = shipPrefab;
+
+            for (int i = 0; i < cacheSize; i++)
+            {
+                var newShip = GameObject.Instantiate(shipPrefab) as GameObject;
+                newShip.SetActive(false);
+                shipList.Add(newShip);
+            }
         }
     }
 
@@ -38,7 +40,8 @@ public class ShipPoolManager{
     {
         if (shipList != null)
         {
-            for (int i = 0; i < cacheSize; i++)
+            int tempShipNum = shipList.Count;
+            for (int i = 0; i < tempShipNum; i++)
             {
                 GameObject.Destroy(shipList[i]);
             }

@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema 
+  xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+  elementFormDefault="qualified" 
+  attributeFormDefault="unqualified"
+>
+  <xs:element name="level">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="levelDefine" type="levelDefine"/>
+        <xs:element name="masterList" type="masterList" />
+        <xs:element name="starList" type="starList"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="levelDefine">
+    <xs:sequence>
+      <xs:element name="levelId" type="xs:int"/>
+      <xs:element name="levelOrder" type="xs:int"/>
+      <xs:element name="levelDes" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="masterList">
+    <xs:sequence>
+      <xs:element name="master" type="master" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="starList">
+    <xs:sequence>
+      <xs:element name="star" type="star" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="master">
+    <xs:sequence>
+      <xs:element name="masterId" type="xs:int"/>
+      <xs:element name="enemyId" type="xs:int"/>
+      <xs:element name="theme">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="Grey" />
+            <xs:enumeration value="Blue" />
+            <xs:enumeration value="Red" />
+            <xs:enumeration value="Green" />
+            <xs:enumeration value="Yellow" />
+            <xs:enumeration value="Orange" />
+            <xs:enumeration value="Black" />
+            <xs:enumeration value="White" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="controllerType">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="Human" />
+            <xs:enumeration value="Computer" />
+            <xs:enumeration value="None" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="aiType">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="Teacher" />
+            <xs:enumeration value="Random" />
+            <xs:enumeration value="Peace" />
+            <xs:enumeration value="Attack" />
+            <xs:enumeration value="Coward" />
+            <xs:enumeration value="God" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="thinkTime" type="xs:float"/>
+      <xs:element name="masterName" type="xs:string"/>
+      <xs:element name="masterDes" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="star">
+    <xs:sequence>
+      <xs:element name="starId" type="xs:int"/>
+      <xs:element name="masterId" type="xs:int"/>
+      <xs:element name="starParentId" type="xs:int"/>
+      <xs:element name="rotateSpeed" type="xs:float"/>
+      <xs:element name="position" type="vector3" />
+      <xs:element name="starType">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="TroopStar" />
+            <xs:enumeration value="DefenceStar" />
+            <xs:enumeration value="MasterStar" />
+            <xs:enumeration value="DoorStar" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="starLevel">
+        <xs:simpleType>
+          <xs:restriction base="xs:int">
+            <xs:enumeration value="0" />
+            <xs:enumeration value="1" />
+            <xs:enumeration value="2" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="maxTroop" type="xs:int"/>
+      <xs:element name="startTroopNum" type="xs:int"/>
+      <xs:element name="bornTime" type="xs:float"/>
+      <xs:element name="bornNum" type="xs:int"/>
+      <xs:element name="detectScope" type="xs:float"/>
+      <xs:element name="shipFlySpeed" type="xs:float"/>
+      <xs:element name="shipShowType">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="Cloud" />
+            <xs:enumeration value="Ring" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="thinkTime" type="xs:float"/>
+      <xs:element name="ringLength" type="xs:float"/>
+      <xs:element name="ringDepth" type="xs:float"/>
+      <xs:element name="ringAddition" type="xs:float"/>
+      <xs:element name="sendShipTime" type="xs:float"/>
+      <xs:element name="sendShipNum" type="xs:float"/>
+      <xs:element name="starDes" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name ="vector3">
+    <xs:sequence>
+      <xs:element name="x" type="xs:float" />
+      <xs:element name="y" type="xs:float" />
+      <xs:element name="z" type="xs:float" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -29,11 +29,12 @@ public class ShipElement : MonoBehaviour
     public StarElement m_StarTo { get; set; }
     public StarElement m_SurrondStar { get; set; }
 
+    public float m_BaseFlySpeed;                            //初始飞船速度
     public float m_FlySpeedScale = 1.0f;                    //飞行速度比例
 
 	public float m_MaxFlySpeed                              //最大飞行速度
     {
-        get { return SharedGameData.shipFlySpeed  * m_FlySpeedScale; }
+        get { return m_BaseFlySpeed * m_FlySpeedScale; }
     }
 
 	//public float m_SurrondSpeed                           //环绕速度

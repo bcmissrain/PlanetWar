@@ -2,20 +2,31 @@
 using System.Collections;
 
 //行星类型
-public enum StarType
+public class StarType
 {
-    TroopStar = 0,  //普通行星
-    DefenceStar,    //防卫行星
-    MasterStar,     //要塞行星
-    DoorStar,       //传送行星
+    public const string TroopStar = "TroopStar";        //普通行星
+    public const string DefenceStar = "DefenceStar";    //防卫行星
+    public const string MasterStar = "MasterStar";      //要塞行星
+    public const string DoorStar = "DoorStar";          //传送行星
+}
+
+public class StarThemeColor
+{
+    public const string Grey    = "Grey";
+    public const string Blue    = "Blue";
+    public const string Red     = "Red";
+    public const string Green   = "Green";
+    public const string Yellow  = "Yellow";
+    public const string Orange  = "Orange";
+    public const string Black   = "Black";
 }
 
 //行星等级
-public enum StarLevel
+public class StarLevel
 {
-    Level0 = 0,
-    Level1,
-    Level2,
+    public const int Level0 = 0;
+    public const int Level1 = 1;
+    public const int Level2 = 2;
 }
 
 //行星状态
@@ -28,10 +39,10 @@ public enum StarStatus
 }
 
 //产生飞船的展现方式
-public enum ShipShowType
+public class ShipShowType
 {
-    Cloud = 0,          //云状
-    Ring                //环状
+    public const string Cloud = "Cloud";          //云状
+    public const string Ring = "Ring";            //环状
 }
 
 /// <summary>
@@ -42,19 +53,24 @@ public class StarElement : MonoBehaviour
 {
     public ShipSender shipSender;       //飞船生成&发射器
     public StarUpdater starUpdater;     //行星逻辑更新器
+    public StarMaterial starMaterial;   //行星UI管理器
 
     public GameObject m_StarSon;        //飞船旋绕子节点 （不显示）
 
     public int m_Index;                 //行星索引，行星的所属可变，但是索引唯一
     public int m_MasterIndex;           //主人索引
-	public StarType m_StarType;         //种类（不可变）
-	public StarLevel m_StarLevel;       //等级（可变）
+    public string m_StarType            //种类（不可变）
+        = StarType.TroopStar;
+    public int m_StarLevel              //等级（可变）
+        = StarLevel.Level0;
     public int m_MaxTroop;              //产生兵力的最大值，超过不再生产
     public int m_StartTroopNum;         //初始化的起始兵力
     public float m_BornTime;            //产生兵力的时间
     public int m_BornNum;               //一次产生兵力的数目
     public float m_DetectScope;         //监测范围
-    public ShipShowType m_ShipShowType; //飞船展现方式
+    public float m_ShipFlySpeed;        //飞船飞行速度
+    public string m_ShipShowType        //飞船展现方式
+        = ShipShowType.Cloud;
 
     public int m_TroopNum               //当前兵力数目
     {
@@ -209,14 +225,14 @@ public class StarElement : MonoBehaviour
             var oldMaster = MasterPoolManager.instance.GetMasterByIndex(m_MasterIndex);
             if (oldMaster)
             {
-                oldMaster.RemoveStarElement(this);
+                oldMaster.LoseStarElement(this);
             }
 
             //添加新的
             var newMaster = MasterPoolManager.instance.GetMasterByIndex(masterIndex);
             if (newMaster)
             {
-                newMaster.AddStarElement(this);
+                newMaster.WinStarElement(this);
             }
 
             //更改索引
@@ -224,6 +240,11 @@ public class StarElement : MonoBehaviour
 
             //播放动画
             //更改UI
+            var starMat = starMaterial.GetMaterialByStar(newMaster.m_ThemeColor);
+            if (starMat)
+            {
+                this.renderer.material = starMat;
+            }
 
             //更新逻辑计算
             this.starUpdater.UpdateSafeDetect();

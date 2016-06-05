@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class SharedGameData : MonoBehaviour {
+    /*
     public static float shipFlySpeed;
     public static float shipSurrendSpeed;
 
@@ -13,4 +14,5 @@ public class SharedGameData : MonoBehaviour {
         shipFlySpeed = param_shipFlySpeed;
         shipSurrendSpeed = param_shipSurrendSpeed;
     }
+    */
 }

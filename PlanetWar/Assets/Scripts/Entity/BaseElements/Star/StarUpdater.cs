@@ -23,6 +23,9 @@ public class StarUpdater : MonoBehaviour {
         GameEventDispatcher.instance.RegistEventHandler(EventNameList.GAME_INPUT_RELEASE_EVENT, shipSender.OnSendTroop);
         GameEventDispatcher.instance.RegistEventHandler(EventNameList.STAR_SEND_SHIP, this.OnSentTroopNotify);
         GameEventDispatcher.instance.RegistEventHandler(EventNameList.STAR_ASK_HELP, this.OnAskedHelp);
+
+        //初始生成默认数目的飞船
+        shipSender.CreateTroopBy(starElement.m_StartTroopNum);
     }
 	
     /// <summary>
@@ -34,11 +37,17 @@ public class StarUpdater : MonoBehaviour {
         //更新生成飞船
         UpdateShipBorn();
 
-        //更新安全度计算
-        UpdateSafeDetect();
+        logicTimeCounter += Time.deltaTime;
+        if (logicTimeCounter >= this.thinkTime)
+        {
+            logicTimeCounter = 0;
 
-        //更新星球逻辑
-        UpdateStarLogic();
+            //更新安全度计算
+            UpdateSafeDetect();
+
+            //更新星球逻辑
+            UpdateStarLogic();
+        }
 
         //更新派遣
         UpdateTroopSend();
@@ -132,7 +141,7 @@ public class StarUpdater : MonoBehaviour {
         Vector3 deltaPos = pos1 - pos2;
         deltaPos.z = 0;
         float distance = deltaPos.magnitude;
-        float deltaTime = distance / SharedGameData.shipFlySpeed;
+        float deltaTime = distance / starElement.m_ShipFlySpeed;
         int deltaShip = (int)(starElement.m_BornNum * deltaTime / starElement.m_BornTime);
         return deltaShip;
     }
@@ -142,12 +151,19 @@ public class StarUpdater : MonoBehaviour {
     /// </summary>
     public void UpdateShipBorn()
     {
-        bornTimeCounter += Time.deltaTime;
-        if (bornTimeCounter >= starElement.m_BornTime)
+        var masterObj = MasterPoolManager.instance.GetMasterByIndex(starElement.m_MasterIndex);
+        if (masterObj)
         {
-            bornTimeCounter = 0;
+            if (masterObj.m_ControllerType != ControllerType.None)
+            {
+                bornTimeCounter += Time.deltaTime;
+                if (bornTimeCounter >= starElement.m_BornTime)
+                {
+                    bornTimeCounter = 0;
 
-            starElement.CreateTroopOnce();
+                    starElement.CreateTroopOnce();
+                }
+            }
         }
     }
 
@@ -156,25 +172,26 @@ public class StarUpdater : MonoBehaviour {
     /// </summary>
     public void UpdateStarLogic()
     {
-        logicTimeCounter += Time.deltaTime;
-        if (logicTimeCounter >= this.thinkTime)
+        var masterObj = MasterPoolManager.instance.GetMasterByIndex(starElement.m_MasterIndex);
+        if (masterObj)
         {
-            logicTimeCounter = 0;
-
-            switch (starElement.m_StarType)
+            if (masterObj.m_ControllerType == ControllerType.Computer)
             {
-                case StarType.TroopStar:
-                    UpdateTroopStarLogic();
-                    break;
-                case StarType.DefenceStar:
-                    UpdateDefenceStarLogic();
-                    break;
-                case StarType.MasterStar:
-                    UpdateMasterStarLogic();
-                    break;
-                case StarType.DoorStar:
-                    UpdateDoorStarLogic();
-                    break;
+                switch (starElement.m_StarType)
+                {
+                    case StarType.TroopStar:
+                        UpdateTroopStarLogic();
+                        break;
+                    case StarType.DefenceStar:
+                        UpdateDefenceStarLogic();
+                        break;
+                    case StarType.MasterStar:
+                        UpdateMasterStarLogic();
+                        break;
+                    case StarType.DoorStar:
+                        UpdateDoorStarLogic();
+                        break;
+                }
             }
         }
     }
@@ -197,8 +214,6 @@ public class StarUpdater : MonoBehaviour {
                 StarElement enemyStar = enemyMaster.m_StarList[0];
                 shipSender.SendTroopTo(enemyStar.m_Index, 0.5f);
             }
-
-
         }
 
     }

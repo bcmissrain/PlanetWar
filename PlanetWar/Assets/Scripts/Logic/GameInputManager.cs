@@ -7,6 +7,7 @@ using System.Collections;
 public class GameInputManager : MonoBehaviour {
     public static int starFromIndex = -1;                   //出发星球
     public static int starToIndex = -1;                     //目的星球
+    public static int starInvalid = -1;
     public static Vector3 touchWorldPos = Vector3.zero;     //当前点击的位置
 
 	void Start () {
@@ -14,6 +15,7 @@ public class GameInputManager : MonoBehaviour {
 	}
 	
 	void Update () {
+        starInvalid = -1;
         //滑动
         if (Input.GetMouseButton(0))
         {
@@ -29,10 +31,19 @@ public class GameInputManager : MonoBehaviour {
                 //点到了行星
                 if (hitStarIndex != -1)
                 {
+                    var masterObj = hitStar.GetComponent<StarElement>().GetMasterElement();
+
                     //如果没有设置开始行星 => 设置 starFromIndex
                     if (starFromIndex == -1)
                     {
-                        starFromIndex = hitStarIndex;
+                        if (masterObj.m_ControllerType == ControllerType.Human)
+                        {
+                            starFromIndex = hitStarIndex;
+                        }
+                        else
+                        {
+                            starInvalid = hitStarIndex;
+                        }
                     }
                     else
                     {
