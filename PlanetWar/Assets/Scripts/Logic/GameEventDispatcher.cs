@@ -14,6 +14,10 @@ public static class EventNameList
     public static string LEVEL_SHIP_BORN_EVENT      = "ship_born";
     //飞船爆炸
     public static string LEVEL_SHIP_BOOM_EVENT      = "ship_boom";
+    //玩家获得胜利
+    public static string LEVEL_PLAYER_WIN_EVENT     = "level_win";
+    //玩家失败
+    public static string LEVEL_PLAYER_LOSE_EVENT    = "level_lose";
 }
 
 public class EventData

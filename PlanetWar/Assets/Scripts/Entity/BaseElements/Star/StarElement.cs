@@ -95,6 +95,11 @@ public class StarElement : MonoBehaviour
         }
     }
 
+    public AudioClip m_WinStarSound;
+    public AudioClip m_LoseStarSound;
+
+    public AudioSource m_AudioSource;
+
     /// <summary>
     /// 升级
     /// </summary>
@@ -233,6 +238,21 @@ public class StarElement : MonoBehaviour
             if (newMaster)
             {
                 newMaster.WinStarElement(this);
+
+                if (m_AudioSource)
+                {
+                    if (newMaster.m_ControllerType == ControllerType.Human)
+                    {
+                        m_AudioSource.clip = m_WinStarSound;
+                        m_AudioSource.Play();
+                    }
+                    else
+                    {
+                        m_AudioSource.clip = m_LoseStarSound;
+                        m_AudioSource.Play();
+                    }
+                }
+
             }
 
             //更改索引

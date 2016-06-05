@@ -267,6 +267,7 @@ public class ShipSender : MonoBehaviour
                 //重置父节点
                 troop[i].transform.parent = null;
                 var delShipScript = troop[i].GetComponent<ShipElement>();
+                
                 //出发
                 delShipScript.m_CanMove = true;
             }

@@ -7,6 +7,8 @@ public class GameLevelManager : MonoBehaviour {
     public GameObject starPrefab;
     public GameObject shipPrefab;
 
+    public bool IfFinishGame = false;
+
     void Awake()
     {
         MasterPoolManager.instance.InitManager();
@@ -19,7 +21,22 @@ public class GameLevelManager : MonoBehaviour {
     }
 
     void Update () {
-        IfGameWin();
+        if (!IfFinishGame)
+        {
+            if (IfGameWin())
+            {
+                GameEventDispatcher.instance.InvokeEvent(EventNameList.LEVEL_PLAYER_WIN_EVENT, null);
+                Time.timeScale = 0;
+                IfFinishGame = true;
+            }
+
+            if (IfGameLose())
+            {
+                GameEventDispatcher.instance.InvokeEvent(EventNameList.LEVEL_PLAYER_LOSE_EVENT, null);
+                Time.timeScale = 0;
+                IfFinishGame = true;
+            }
+        }
     }
 
     void OnDestroy()
@@ -43,6 +60,23 @@ public class GameLevelManager : MonoBehaviour {
             }
         }
         return true;
+    }
+
+    bool IfGameLose()
+    {
+        var masterMap = MasterPoolManager.masterMap;
+        foreach (var item in masterMap.Values)
+        {
+            if (item.m_ControllerType == ControllerType.Human)
+            {
+                if (item.masterUpdater.IfLoseGame())
+                {
+                    return true;
+                }
+                break;
+            }
+        }
+        return false;
     }
 
     public void LoadLevelByFile(string name)
