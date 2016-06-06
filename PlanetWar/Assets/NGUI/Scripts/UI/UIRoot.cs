@@ -25,6 +25,8 @@ public class UIRoot : MonoBehaviour
 	{
 		PixelPerfect,
 		FixedSize,
+        //ChangeByBC
+        FixedWidthSize,
 		FixedSizeOnMobiles,
 	}
 
@@ -74,7 +76,8 @@ public class UIRoot : MonoBehaviour
 	{
 		get
 		{
-			if (scalingStyle == Scaling.FixedSize) return manualHeight;
+            //ChangeByBC
+			if (scalingStyle == Scaling.FixedSize || scalingStyle == Scaling.FixedWidthSize) return manualHeight;
 
 #if UNITY_IPHONE || UNITY_ANDROID || UNITY_WP8 || UNITY_BLACKBERRY
 			if (scalingStyle == Scaling.FixedSizeOnMobiles)
@@ -126,7 +129,8 @@ public class UIRoot : MonoBehaviour
 	{
 		height = Mathf.Max(2, height);
 
-		if (scalingStyle == Scaling.FixedSize)
+        //ChangeByBC
+		if (scalingStyle == Scaling.FixedSize || scalingStyle == Scaling.FixedWidthSize)
 			return (float)manualHeight / height;
 
 #if UNITY_IPHONE || UNITY_ANDROID || UNITY_WP8 || UNITY_BLACKBERRY
@@ -171,8 +175,15 @@ public class UIRoot : MonoBehaviour
 			if (calcActiveHeight > 0f )
 			{
 				float size = 2f / calcActiveHeight;
-				
-				Vector3 ls = mTrans.localScale;
+
+                //ChangeByBC  
+                if (scalingStyle == Scaling.FixedWidthSize)
+                {
+                    float radio = (float)Screen.width / Screen.height;
+                    size = size * radio;
+                }
+
+                Vector3 ls = mTrans.localScale;
 	
 				if (!(Mathf.Abs(ls.x - size) <= float.Epsilon) ||
 					!(Mathf.Abs(ls.y - size) <= float.Epsilon) ||

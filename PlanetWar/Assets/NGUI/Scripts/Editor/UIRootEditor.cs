@@ -23,7 +23,8 @@ public class UIRootEditor : Editor
 			NGUIEditorTools.DrawProperty("Manual Height", serializedObject, "manualHeight");
 		}
 
-		if (scaling != UIRoot.Scaling.FixedSize)
+        //ChangeByBC
+		if (scaling != UIRoot.Scaling.FixedSize && scaling != UIRoot.Scaling.FixedWidthSize)
 		{
 			NGUIEditorTools.DrawProperty("Minimum Height", serializedObject, "minimumHeight");
 			NGUIEditorTools.DrawProperty("Maximum Height", serializedObject, "maximumHeight");
