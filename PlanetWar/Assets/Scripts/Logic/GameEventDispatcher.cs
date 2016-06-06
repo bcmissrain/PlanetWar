@@ -14,10 +14,20 @@ public static class EventNameList
     public static string LEVEL_SHIP_BORN_EVENT      = "ship_born";
     //飞船爆炸
     public static string LEVEL_SHIP_BOOM_EVENT      = "ship_boom";
+    //进入菜单（针对音乐）
+    public static string MENU_BEGIN_MUSIC_PLAY      = "menu_music";
+    //点击按钮（音效）
+    public static string BUTTON_CLICK_OK_EVENT      = "click_ok_sound";
+    public static string BUTTON_CLICK_NO_EVENT      = "click_no_sound";
+    //游戏开始（针对音乐）
+    public static string LEVEL_BEGIN_MUSIC_PLAY     = "level_music";
     //玩家获得胜利
     public static string LEVEL_PLAYER_WIN_EVENT     = "level_win";
     //玩家失败
     public static string LEVEL_PLAYER_LOSE_EVENT    = "level_lose";
+
+    //重置Option按钮状态
+    public static string OPTION_BUTTON_RESET_EVENT  = "option_reset";
 }
 
 public class EventData
