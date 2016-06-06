@@ -2,6 +2,10 @@
 using System.Collections;
 
 public class TeachModeManager : MonoBehaviour {
+    void Awake()
+    {
+
+    }
 
 	void Start () {
         //播放音乐

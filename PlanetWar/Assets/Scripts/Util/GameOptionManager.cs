@@ -13,6 +13,7 @@ public class GameOptionManager : MonoBehaviour {
 
     void Awake()
     {
+        SharedGameData.OptionEnable = false;
         GameEventDispatcher.instance.RegistEventHandler(EventNameList.OPTION_BUTTON_RESET_EVENT, ResetEnableButtons);
     }
 

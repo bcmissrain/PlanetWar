@@ -14,10 +14,12 @@ public class GameLevelManager : MonoBehaviour {
         MasterPoolManager.instance.InitManager();
         ShipPoolManager.instance.InitManager(shipPrefab);
         StarPoolManager.instance.InitManager();
+
+        LoadLevelByFile("Test/level0-0");
     }
 
 	void Start () {
-        LoadLevelByFile("Test/level0-0");
+
     }
 
     void Update () {

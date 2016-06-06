@@ -302,7 +302,7 @@ public class ShipSender : MonoBehaviour
     {
         if (starElement.m_Index == eventData.intData1)
         {
-            SendTroopTo(eventData.intData2, 0.5f);
+            SendTroopTo(eventData.intData2, SharedGameData.TroopSendPercent);
         }
     }
 }
