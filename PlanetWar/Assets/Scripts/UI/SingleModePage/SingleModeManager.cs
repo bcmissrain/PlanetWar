@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TeachModeManager : MonoBehaviour {
+public class SingleModeManager : MonoBehaviour {
     public GameObject WinPanelPrefab;
     public GameObject UIRootObj;
 
@@ -11,18 +11,20 @@ public class TeachModeManager : MonoBehaviour {
         GameEventDispatcher.instance.RegistEventHandler(EventNameList.LEVEL_PLAYER_LOSE_EVENT, OnGameLose);
     }
 
-    void Start () {
+    void Start()
+    {
         //播放音乐
         GameEventDispatcher.instance.InvokeEvent(EventNameList.LEVEL_BEGIN_MUSIC_PLAY, null);
     }
-	
-	void Update () {
+
+    void Update()
+    {
         if (Input.GetKey(KeyCode.Escape))
         {
             //Application.Quit();
             Application.LoadLevel("MainScene");
         }
-	}
+    }
 
     void OnDestroy()
     {

@@ -10,6 +10,7 @@ public class MasterPoolManager{
 
     public void InitManager()
     {
+        ReleaseManager();
         masterMap = new Dictionary<int, MasterElement>();
     }
 

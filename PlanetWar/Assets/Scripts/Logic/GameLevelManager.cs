@@ -6,6 +6,7 @@ public class GameLevelManager : MonoBehaviour {
     public GameObject masterPrefab;
     public GameObject starPrefab;
     public GameObject shipPrefab;
+    public string levelConfigName;
 
     public bool IfFinishGame = false;
 
@@ -15,7 +16,7 @@ public class GameLevelManager : MonoBehaviour {
         ShipPoolManager.instance.InitManager(shipPrefab);
         StarPoolManager.instance.InitManager();
 
-        LoadLevelByFile("Test/level0-0");
+        LoadLevelByFile(levelConfigName);
     }
 
 	void Start () {
@@ -122,6 +123,7 @@ public class GameLevelManager : MonoBehaviour {
                 var updaterScript = starObj.GetComponent<StarUpdater>();
                 var senderScript = starObj.GetComponent<ShipSender>();
                 var materialScript = starObj.GetComponent<StarMaterial>();
+                var rotateScript = starObj.GetComponent<TestAutoRotate>();
 
                 starObj.name = star.SelectSingleNode("starDes").InnerText;
                 var xPos = star.SelectSingleNode("position");
@@ -150,6 +152,18 @@ public class GameLevelManager : MonoBehaviour {
                 senderScript.sendShipNum = int.Parse(star.SelectSingleNode("sendShipNum").InnerText);
 
                 updaterScript.thinkTime = float.Parse(star.SelectSingleNode("thinkTime").InnerText);
+
+                int parentIndex = int.Parse(star.SelectSingleNode("starParentId").InnerText);
+                float rotateSpeed = float.Parse(star.SelectSingleNode("rotateSpeed").InnerText);
+                if (parentIndex != -1)
+                {
+                    var parentObj = StarPoolManager.instance.GetStarByIndex(parentIndex);
+                    if (parentObj)
+                    {
+                        rotateScript.center = parentObj.transform;
+                        rotateScript.rotateSpeed = rotateSpeed;
+                    }
+                }
 
                 //注册到缓冲池中
                 StarPoolManager.instance.CacheStar(elementScript.m_Index, starObj);

@@ -54,16 +54,19 @@ public class GamePlayManager : MonoBehaviour {
 
     public void OnTeachModeClick()
     {
+        GameEventDispatcher.instance.InvokeEvent(EventNameList.BUTTON_CLICK_OK_EVENT, null);
         Application.LoadLevel("TeachModeScene");
     }
 
     public void OnSingleModeClick()
     {
-
+        GameEventDispatcher.instance.InvokeEvent(EventNameList.BUTTON_CLICK_OK_EVENT, null);
+        Application.LoadLevel("SingleModeScene");
     }
 
     public void OnMultiModeClick()
     {
-
+        GameEventDispatcher.instance.InvokeEvent(EventNameList.BUTTON_CLICK_OK_EVENT, null);
+        Application.LoadLevel("MultiModeScene");
     }
 }

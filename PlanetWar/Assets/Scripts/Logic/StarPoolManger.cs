@@ -13,6 +13,7 @@ public class StarPoolManager{
 
     public void InitManager()
     {
+        ReleaseManager();
         starMap = new Dictionary<int, GameObject>();
     }
 

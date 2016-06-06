@@ -18,6 +18,7 @@ public class ShipPoolManager{
     /// </summary>
     public void InitManager(GameObject shipPrefab)
     {
+        ReleaseManager();
         shipList = new List<GameObject>();
         if (shipPrefab)
         {

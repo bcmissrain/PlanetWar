@@ -115,6 +115,19 @@ public class StarUpdater : MonoBehaviour {
     /// <param name="enemyNum">派遣的兵力数目</param>
     private void DealWithAttackNotify(StarElement enemyStar, int enemyNum)
     {
+        var master = starElement.GetMasterElement();
+        if (master)
+        {
+            if (master.m_ControllerType != ControllerType.Computer)
+            {
+                return;
+            }
+        }
+        else
+        {
+            return;
+        }
+
         int deltaShipNum = GetDeltaShipByTime(enemyStar.transform.position,this.transform.position);
         int askHelpNum = enemyNum - deltaShipNum - starElement.m_TroopNum;
         //print("enemyNum :" + enemyNum + " DeltaNum :" + deltaShipNum + " thisNum :" + starElement.m_TroopNum+"Ask help:"+askHelpNum);
