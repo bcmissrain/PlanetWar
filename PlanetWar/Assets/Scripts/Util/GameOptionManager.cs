@@ -11,8 +11,6 @@ public class GameOptionManager : MonoBehaviour {
     public GameObject soundButton;
     public GameObject qualityButton;
 
-    public static bool OptionEnable = false;
-
     void Awake()
     {
         GameEventDispatcher.instance.RegistEventHandler(EventNameList.OPTION_BUTTON_RESET_EVENT, ResetEnableButtons);
@@ -33,9 +31,9 @@ public class GameOptionManager : MonoBehaviour {
 
     public void ResetOptionButton()
     {
-        OptionEnable = !OptionEnable;
+        SharedGameData.OptionEnable = !SharedGameData.OptionEnable;
         //控制音效
-        if (OptionEnable)
+        if (SharedGameData.OptionEnable)
         {
             GameEventDispatcher.instance.InvokeEvent(EventNameList.BUTTON_CLICK_OK_EVENT, null);
         }
@@ -48,7 +46,13 @@ public class GameOptionManager : MonoBehaviour {
 
     public void ResetEnableButtons(EventData eventData)
     {
-        if (OptionEnable)
+        //不知道发生了什么的bug
+        if (musicButton == null)
+        {
+            return;
+        }
+
+        if (SharedGameData.OptionEnable)
         {
             musicButton.SetActive(true);
             soundButton.SetActive(true);
@@ -61,7 +65,7 @@ public class GameOptionManager : MonoBehaviour {
             qualityButton.SetActive(false);
         }
 
-        if (OptionEnable)
+        if (SharedGameData.OptionEnable)
         {
             optionEnableObj.SetActive(true);
         }
@@ -70,7 +74,7 @@ public class GameOptionManager : MonoBehaviour {
             optionEnableObj.SetActive(false);
         }
 
-        if (GameMusicController.MusicEnable)
+        if (SharedGameData.MusicEnable)
         {
             musicEnableObj.SetActive(true);
         }
@@ -79,7 +83,7 @@ public class GameOptionManager : MonoBehaviour {
             musicEnableObj.SetActive(false);
         }
 
-        if (GameMusicController.SoundEnable)
+        if (SharedGameData.SoundEnable)
         {
             soundEnableObj.SetActive(true);
         }
@@ -88,7 +92,7 @@ public class GameOptionManager : MonoBehaviour {
             soundEnableObj.SetActive(false);
         }
 
-        if (GameFrameManager.FrameRate == 60)
+        if (SharedGameData.FrameRate == 60)
         {
             qualityEnableObj.SetActive(true);
         }

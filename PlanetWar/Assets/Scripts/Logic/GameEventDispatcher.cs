@@ -19,6 +19,10 @@ public static class EventNameList
     //点击按钮（音效）
     public static string BUTTON_CLICK_OK_EVENT      = "click_ok_sound";
     public static string BUTTON_CLICK_NO_EVENT      = "click_no_sound";
+    //重置音乐
+    public static string MUSIC_RESET_EVENT          = "music_reset";
+    //重置音效
+    public static string SOUND_RESET_EVENT          = "sound_reset";
     //游戏开始（针对音乐）
     public static string LEVEL_BEGIN_MUSIC_PLAY     = "level_music";
     //玩家获得胜利

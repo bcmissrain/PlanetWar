@@ -2,9 +2,6 @@
 using System.Collections;
 
 public class GameMusicController : MonoBehaviour {
-    public static bool MusicEnable = true;
-    public static bool SoundEnable = true;
-
     public AudioSource m_AudioSourceMusic;
     public AudioSource m_AudioSourceSound;
 
@@ -22,8 +19,12 @@ public class GameMusicController : MonoBehaviour {
         GameEventDispatcher.instance.RegistEventHandler(EventNameList.LEVEL_BEGIN_MUSIC_PLAY, OnLevelEnter);
         GameEventDispatcher.instance.RegistEventHandler(EventNameList.LEVEL_PLAYER_WIN_EVENT, OnGameWin);
         GameEventDispatcher.instance.RegistEventHandler(EventNameList.LEVEL_PLAYER_LOSE_EVENT, OnGameLose);
+        GameEventDispatcher.instance.RegistEventHandler(EventNameList.MUSIC_RESET_EVENT, OnResetMusic);
+        GameEventDispatcher.instance.RegistEventHandler(EventNameList.SOUND_RESET_EVENT, OnResetSound);
         GameEventDispatcher.instance.RegistEventHandler(EventNameList.BUTTON_CLICK_OK_EVENT, OnButtonClickOK);
         GameEventDispatcher.instance.RegistEventHandler(EventNameList.BUTTON_CLICK_NO_EVENT, OnButtonClickNo);
+
+        DontDestroyOnLoad(gameObject);
     }
 
     void Start () {
@@ -32,17 +33,29 @@ public class GameMusicController : MonoBehaviour {
 
     void OnDestroy()
     {
-        GameEventDispatcher.instance.RemoveEventHandler(EventNameList.MENU_BEGIN_MUSIC_PLAY, OnMenuEnter);
-        GameEventDispatcher.instance.RemoveEventHandler(EventNameList.LEVEL_BEGIN_MUSIC_PLAY, OnLevelEnter);
-        GameEventDispatcher.instance.RemoveEventHandler(EventNameList.LEVEL_PLAYER_WIN_EVENT, OnGameWin);
-        GameEventDispatcher.instance.RemoveEventHandler(EventNameList.LEVEL_PLAYER_LOSE_EVENT, OnGameLose);
+        //GameEventDispatcher.instance.RemoveEventHandler(EventNameList.MENU_BEGIN_MUSIC_PLAY, OnMenuEnter);
+        //GameEventDispatcher.instance.RemoveEventHandler(EventNameList.LEVEL_BEGIN_MUSIC_PLAY, OnLevelEnter);
+        //GameEventDispatcher.instance.RemoveEventHandler(EventNameList.LEVEL_PLAYER_WIN_EVENT, OnGameWin);
+        //GameEventDispatcher.instance.RemoveEventHandler(EventNameList.LEVEL_PLAYER_LOSE_EVENT, OnGameLose);
+        //GameEventDispatcher.instance.RegistEventHandler(EventNameList.MUSIC_RESET_EVENT, OnResetMusic);
+        //GameEventDispatcher.instance.RegistEventHandler(EventNameList.SOUND_RESET_EVENT, OnResetSound);
+        //GameEventDispatcher.instance.RemoveEventHandler(EventNameList.BUTTON_CLICK_OK_EVENT, OnButtonClickOK);
+        //GameEventDispatcher.instance.RemoveEventHandler(EventNameList.BUTTON_CLICK_NO_EVENT, OnButtonClickNo);
+        GameEventDispatcher.instance.RemoveEventHandlerByName(EventNameList.MENU_BEGIN_MUSIC_PLAY);
+        GameEventDispatcher.instance.RemoveEventHandlerByName(EventNameList.LEVEL_BEGIN_MUSIC_PLAY);
+        GameEventDispatcher.instance.RemoveEventHandlerByName(EventNameList.LEVEL_PLAYER_WIN_EVENT);
+        GameEventDispatcher.instance.RemoveEventHandlerByName(EventNameList.LEVEL_PLAYER_LOSE_EVENT);
+        GameEventDispatcher.instance.RemoveEventHandlerByName(EventNameList.MUSIC_RESET_EVENT);
+        GameEventDispatcher.instance.RemoveEventHandlerByName(EventNameList.SOUND_RESET_EVENT);
+        GameEventDispatcher.instance.RemoveEventHandlerByName(EventNameList.BUTTON_CLICK_OK_EVENT);
+        GameEventDispatcher.instance.RemoveEventHandlerByName(EventNameList.BUTTON_CLICK_NO_EVENT);
     }
 
     public void OnMenuEnter(EventData eventData)
     {
         m_AudioSourceMusic.loop = true;
         m_AudioSourceMusic.clip = m_MenuBackMusic;
-        if (MusicEnable)
+        if (SharedGameData.MusicEnable)
         {
             m_AudioSourceMusic.Play();
         }
@@ -52,7 +65,7 @@ public class GameMusicController : MonoBehaviour {
     {
         m_AudioSourceMusic.loop = true;
         m_AudioSourceMusic.clip = m_GameBackMusic;
-        if (MusicEnable)
+        if (SharedGameData.MusicEnable)
         {
             m_AudioSourceMusic.Play();
         }
@@ -62,7 +75,7 @@ public class GameMusicController : MonoBehaviour {
     {
         m_AudioSourceMusic.loop = false;
         m_AudioSourceMusic.clip = m_WinMusic;
-        if (MusicEnable)
+        if (SharedGameData.MusicEnable)
         {
             m_AudioSourceMusic.Play();
         }
@@ -72,7 +85,7 @@ public class GameMusicController : MonoBehaviour {
     {
         m_AudioSourceMusic.loop = false;
         m_AudioSourceMusic.clip = m_LoseMusic;
-        if (MusicEnable)
+        if (SharedGameData.MusicEnable)
         {
             m_AudioSourceMusic.Play();
         }
@@ -80,7 +93,7 @@ public class GameMusicController : MonoBehaviour {
 
     public void OnButtonClickOK(EventData eventData)
     {
-        if (SoundEnable)
+        if (SharedGameData.SoundEnable)
         {
             m_AudioSourceSound.clip = m_ClickOk;
             m_AudioSourceSound.Play();
@@ -89,17 +102,17 @@ public class GameMusicController : MonoBehaviour {
 
     public void OnButtonClickNo(EventData eventData)
     {
-        if (SoundEnable)
+        if (SharedGameData.SoundEnable)
         {
             m_AudioSourceSound.clip = m_ClickNo;
             m_AudioSourceSound.Play();
         }
     }
 
-    public void ResetMusic()
+    public void OnResetMusic(EventData eventData)
     {
-        MusicEnable = !MusicEnable;
-        if (MusicEnable)
+        SharedGameData.MusicEnable = !SharedGameData.MusicEnable;
+        if (SharedGameData.MusicEnable)
         {
             m_AudioSourceMusic.Play();
         }
@@ -109,7 +122,7 @@ public class GameMusicController : MonoBehaviour {
         }
 
         //控制音效
-        if (MusicEnable)
+        if (SharedGameData.MusicEnable)
         {
             GameEventDispatcher.instance.InvokeEvent(EventNameList.BUTTON_CLICK_OK_EVENT, null);
         }
@@ -121,12 +134,12 @@ public class GameMusicController : MonoBehaviour {
         GameEventDispatcher.instance.InvokeEvent(EventNameList.OPTION_BUTTON_RESET_EVENT, null);
     }
 
-    public void ResetSound()
+    public void OnResetSound(EventData eventData)
     {
-        SoundEnable = !SoundEnable;
+        SharedGameData.SoundEnable = !SharedGameData.SoundEnable;
 
         //控制音效
-        if (SoundEnable)
+        if (SharedGameData.SoundEnable)
         {
             GameEventDispatcher.instance.InvokeEvent(EventNameList.BUTTON_CLICK_OK_EVENT, null);
         }
