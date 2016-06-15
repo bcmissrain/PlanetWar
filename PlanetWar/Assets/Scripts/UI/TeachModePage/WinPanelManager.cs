@@ -24,8 +24,9 @@ public class WinPanelManager : MonoBehaviour {
             ifClicked = true;
             GameEventDispatcher.instance.InvokeEvent(EventNameList.BUTTON_CLICK_NO_EVENT, null);
             //playController.Play(true);
-            //Application.LoadLevel("MainScene");
-            Application.Quit();
+            Time.timeScale = 1;
+            Application.LoadLevel("MainScene");
+            //Application.Quit();
             AutoRemove();
         }
     }

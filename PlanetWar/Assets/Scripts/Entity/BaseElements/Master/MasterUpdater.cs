@@ -148,7 +148,7 @@ public class MasterUpdater : MonoBehaviour {
 
     private void MakeDecisionByPeacer(MasterElement enemyMaster)
     {
-
+        
     }
 
     private void MakeDecisionByCoward(MasterElement enemyMaster)
