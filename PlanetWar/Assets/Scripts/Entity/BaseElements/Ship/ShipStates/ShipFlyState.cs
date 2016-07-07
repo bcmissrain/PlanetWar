@@ -24,7 +24,7 @@ public class ShipFlyState : ShipStateBase
         if (m_Ship.m_ToIndex != -1)
         {
             m_Ship.shipMover.MoveToTarget();
-
+			//m_Ship.MoveToTarget();
             if (m_Ship.IfCollideTarget())
             {
                 EnterTargetStar(m_Ship.m_StarTo.gameObject);
